@@ -1,23 +1,17 @@
-#include <Arduino.h>
+#include "main.h"
+#include <SensirionI2CSfa3x.h>
 
-// put function declarations here:
-int myFunction(int, int);
+ulong iteration = 0;
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Wire.begin();
+  Serial.begin(115200);
+  Serial.println("\nI2C Scanner");
   pinMode(18, OUTPUT);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  digitalWrite(18, HIGH); // turn the LED on
-  delay(500);             // wait for 500 milliseconds
-  digitalWrite(18, LOW);  // turn the LED off
-  delay(500);             // wait for 500 milliseconds
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  Toggle_Status_Led();
+  Serial.printf("loop %d\n", ++iteration);
+  delay(500);
 }

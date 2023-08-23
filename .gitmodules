@@ -1,0 +1,6 @@
+[submodule "lib/arduino-core"]
+	path = lib/arduino-core
+	url = https://github.com/Sensirion/arduino-core.git
+[submodule "lib/arduino-i2c-sfa3x"]
+	path = lib/arduino-i2c-sfa3x
+	url = https://github.com/Sensirion/arduino-i2c-sfa3x.git
