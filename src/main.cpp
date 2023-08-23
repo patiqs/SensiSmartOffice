@@ -1,5 +1,6 @@
 #include "main.h"
 #include "Sfa3x.h"
+#include "Web.h"
 
 ulong iteration = 0;
 
@@ -11,6 +12,7 @@ void setup() {
   Setup_Wifi();
 
   Sfa3x.begin();
+  Web.begin();
 }
 
 void loop() {
@@ -19,4 +21,5 @@ void loop() {
   delay(1000);
 
   Sfa3x.print();
+  Web.handleClient();
 }

@@ -2,8 +2,8 @@
 #include <WiFi.h>
 
 // SSID & Password
-const char* ssid = "SensirionMA";  // Enter your SSID here
-const char* password = "W1Fi4Employ33";  //Enter your Password here
+const char* ssid = "tardi";  // Enter your SSID here
+const char* password = "12345678";  //Enter your Password here
 
 void Setup_Wifi(){
   Serial.println("Try Connecting to ");
