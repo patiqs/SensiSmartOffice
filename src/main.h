@@ -3,5 +3,6 @@
 #include <Arduino.h>
 
 void Toggle_Status_Led();
+void Setup_Wifi();
 
 #endif /* MAIN_H */
