@@ -12,14 +12,24 @@ void setup() {
   Setup_Wifi();
 
   Sfa3x.begin();
+  String err = Sfa3x.getError();
+  Serial.println(err);
+  
   Web.begin();
 }
 
 void loop() {
+  ++iteration;
   Toggle_Status_Led();
-  Serial.printf("loop %d\n", ++iteration);
   delay(1000);
 
-  Sfa3x.print();
+  Sfa3x.read();
+
+  Web.setIteration(iteration);
+
+  String err = Sfa3x.getError();
+  Serial.println(err);
+  Web.setError(err);
+
   Web.handleClient();
 }

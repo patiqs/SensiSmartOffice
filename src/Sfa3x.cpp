@@ -2,11 +2,15 @@
 #include <SensirionI2CSfa3x.h>
 #include "Sfa3x.h"
 
+#define I2C_SDA 33
+#define I2C_SCL 32
+
 SensirionI2CSfa3x sfa3x;
 Sfa3xClass Sfa3x;
 
 Sfa3xClass::Sfa3xClass(/* args */)
 {
+    _error.reserve(256);
 }
 
 Sfa3xClass::~Sfa3xClass()
@@ -25,35 +29,35 @@ void Sfa3xClass::begin(){
 
     // Start Measurement
     error = sfa3x.startContinuousMeasurement();
-    if (error)
-    {
-        Serial.print("Error trying to execute startContinuousMeasurement(): ");
-        errorToString(error, errorMessage, 256);
-        Serial.println(errorMessage);
-    }
+    SetError(error, "Error trying to execute startContinuousMeasurement(): ", [](Sfa3xClass* instance){});
 }
 
-void Sfa3xClass::print(){
-      uint16_t error;
-  char errorMessage[256];
+void Sfa3xClass::read(){
+  uint16_t error;
 
-  delay(1000);
-  int16_t hcho;
-  int16_t humidity;
-  int16_t temperature;
-  error = sfa3x.readMeasuredValues(hcho, humidity, temperature);
-  if (error) {
-      Serial.print("Error trying to execute readMeasuredValues(): ");
-      errorToString(error, errorMessage, 256);
-      Serial.println(errorMessage);
-  } else {
+  error = sfa3x.readMeasuredValues(_hcho, _humidity, _temperature);
+  SetError(error, "Error trying to execute readMeasuredValues(): ", [](Sfa3xClass* instance){
       Serial.print("Hcho:");
-      Serial.print(hcho / 5.0);
+      Serial.print(instance->_hcho / 5.0);
       Serial.print("\t");
       Serial.print("Humidity:");
-      Serial.print(humidity / 100.0);
+      Serial.print(instance->_humidity / 100.0);
       Serial.print("\t");
       Serial.print("Temperature:");
-      Serial.println(temperature / 200.0);
-  }
+      Serial.println(instance->_temperature / 200.0);
+  });
+
+}
+
+void Sfa3xClass::SetError(uint16_t error, String prefix, std::function<void(Sfa3xClass*)> onSuccess){
+    if (error)
+    {
+        char buffer[256];
+        errorToString(error, buffer, sizeof(buffer));
+        _error = prefix + buffer;
+    }
+    else{
+        _error = "No error";
+        onSuccess(this);
+    }
 }
