@@ -4,17 +4,20 @@
 class Sfa3xClass
 {
 private:
-    int16_t _hcho;
-    int16_t _humidity;
-    int16_t _temperature;
+    double _hcho;
+    double _humidity;
+    double _temperature;
     String _error;
-    void SetError(uint16_t error, String prefix, std::function<void(Sfa3xClass*)> onSuccess);
+    void SetError(String prefix, uint16_t error);
 
 public:
     Sfa3xClass(/* args */);
     ~Sfa3xClass();
 
     String getError() { return _error; }
+    double getFormaldehyde() { return _hcho; };
+    double getHumidity() { return _humidity; };
+    double getTemp() { return _temperature; };
 
     void begin();
     void read();

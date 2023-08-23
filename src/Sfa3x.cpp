@@ -18,7 +18,9 @@ Sfa3xClass::~Sfa3xClass()
 }
 
 void Sfa3xClass::begin(){
-    Wire.begin();
+    Wire.begin(I2C_SDA, I2C_SCL, 10000UL);
+    //Wire.setClock(10000UL);
+    //Wire.begin();
 
     sfa3x.begin(Wire);
 
@@ -29,27 +31,24 @@ void Sfa3xClass::begin(){
 
     // Start Measurement
     error = sfa3x.startContinuousMeasurement();
-    SetError(error, "Error trying to execute startContinuousMeasurement(): ", [](Sfa3xClass* instance){});
+    SetError("Error trying to execute startContinuousMeasurement(): ", error);
 }
 
 void Sfa3xClass::read(){
   uint16_t error;
+  int16_t hcho;
+  int16_t humidity;
+  int16_t temperature;
 
-  error = sfa3x.readMeasuredValues(_hcho, _humidity, _temperature);
-  SetError(error, "Error trying to execute readMeasuredValues(): ", [](Sfa3xClass* instance){
-      Serial.print("Hcho:");
-      Serial.print(instance->_hcho / 5.0);
-      Serial.print("\t");
-      Serial.print("Humidity:");
-      Serial.print(instance->_humidity / 100.0);
-      Serial.print("\t");
-      Serial.print("Temperature:");
-      Serial.println(instance->_temperature / 200.0);
-  });
+  error = sfa3x.readMeasuredValues(hcho, humidity, temperature);
+  _hcho = hcho / 5.0;
+  _humidity = humidity / 100.0;
+  _temperature = temperature/ 200.0;
 
+  SetError("Error trying to execute readMeasuredValues(): ", error);
 }
 
-void Sfa3xClass::SetError(uint16_t error, String prefix, std::function<void(Sfa3xClass*)> onSuccess){
+void Sfa3xClass::SetError(String prefix, uint16_t error){
     if (error)
     {
         char buffer[256];
@@ -58,6 +57,5 @@ void Sfa3xClass::SetError(uint16_t error, String prefix, std::function<void(Sfa3
     }
     else{
         _error = "No error";
-        onSuccess(this);
     }
 }

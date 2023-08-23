@@ -1,12 +1,11 @@
 #ifndef WEB_H
 #define WEB_H
 #include <WString.h>
-
+#include <map>
 class WebClass
 {
 private:
-    int _iteration;
-    String _error;
+    std::map<String, String> _measures;
 
 public:
     WebClass(/* args */);
@@ -15,8 +14,8 @@ public:
 
     void handle_root();
 
-    void setIteration(int iteration) {_iteration = iteration; }
-    void setError(String error) { _error = error; }
+    void clearMeasures() {_measures.clear();}
+    void setMeasure(String key, String value);
 };
 
 extern WebClass Web;
