@@ -20,7 +20,7 @@ void WebClass::handleClient()
 
 void WebClass::setMeasure(String key, String value)
 {
-  _measures[key] = value;
+  _measures.push_back(std::pair<String, String>(key, value));
   Serial.println(key + ":" + value);
 }
 
@@ -43,7 +43,7 @@ void WebClass::handle_root()
 {
   String response = HTMLHeader;
 
-  std::map<String, String>::iterator it;
+  std::vector<std::pair<String, String>>::iterator it;
 
   for (it = _measures.begin(); it != _measures.end(); it++)
   {

@@ -2,10 +2,11 @@
 #define WEB_H
 #include <WString.h>
 #include <map>
+#include <vector>
 class WebClass
 {
 private:
-    std::map<String, String> _measures;
+    std::vector<std::pair<String, String>> _measures;
 
 public:
     WebClass(/* args */);
