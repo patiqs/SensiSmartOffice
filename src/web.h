@@ -1,12 +1,12 @@
 #ifndef WEB_H
 #define WEB_H
-#include <WString.h>
+#include "measureRecord.h"
 #include <map>
 #include <vector>
 class WebClass
 {
 private:
-    std::vector<std::pair<String, String>> _measures;
+    std::vector<MeasureRecord> _measures;
 
 public:
     WebClass(/* args */);
@@ -15,8 +15,9 @@ public:
 
     void handle_root();
 
-    void clearMeasures() {_measures.clear();}
-    void setMeasure(String key, String value);
+    void clearMeasures() { _measures.clear(); }
+    void pushMeasure(MeasureRecord measure);
+    void pushMeasures(std::vector<MeasureRecord> measures);
 };
 
 extern WebClass Web;

@@ -1,23 +1,18 @@
 #ifndef SFA3X_H
 #define SFA3X_H
 
+#include "measureRecord.h"
+#include <vector>
+
 class Sfa3xClass
 {
 private:
-    double _hcho;
-    double _humidity;
-    double _temperature;
-    String _error;
+    std::vector<MeasureRecord> _measures;
     void SetError(String prefix, uint16_t error);
+    void startMeasurement();
 
 public:
-    Sfa3xClass(/* args */);
-    ~Sfa3xClass();
-
-    String getError() { return _error; }
-    double getFormaldehyde() { return _hcho; };
-    double getHumidity() { return _humidity; };
-    double getTemp() { return _temperature; };
+    std::vector<MeasureRecord> getMeasures() { return _measures; };
 
     void begin();
     void read();

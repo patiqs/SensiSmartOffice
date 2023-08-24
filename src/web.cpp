@@ -18,12 +18,6 @@ void WebClass::handleClient()
   server.handleClient();
 }
 
-void WebClass::setMeasure(String key, String value)
-{
-  _measures.push_back(std::pair<String, String>(key, value));
-  Serial.println(key + ":" + value);
-}
-
 // HTML & CSS contents which display on web server
 String HTMLHeader = "<!DOCTYPE html>\
 <html>\
@@ -43,16 +37,35 @@ void WebClass::handle_root()
 {
   String response = HTMLHeader;
 
-  std::vector<std::pair<String, String>>::iterator it;
-
-  for (it = _measures.begin(); it != _measures.end(); it++)
+  std::vector<MeasureRecord>::iterator itRecord;
+  for (itRecord = _measures.begin(); itRecord != _measures.end(); itRecord++)
   {
-    response += "<p>" + it->first + " : " + it->second + "</p>";
+    String s = itRecord->Name + " : ";
+    if (itRecord->sVal == "")
+    {
+      s += itRecord->dVal;
+    }
+    else
+    {
+      s += itRecord->sVal;
+    }
+    Serial.println(s.c_str());
+    response += "<p>" + s + "</p>";
   }
 
   response += HtmlFooter;
 
   server.send(200, "text/html", response.c_str());
+}
+
+void WebClass::pushMeasure(MeasureRecord measure)
+{
+  _measures.push_back(measure);
+}
+
+void WebClass::pushMeasures(std::vector<MeasureRecord> measures)
+{
+  _measures.insert(_measures.end(), measures.begin(), measures.end());
 }
 
 WebClass Web;

@@ -12,8 +12,6 @@ void setup() {
   Setup_Wifi_AP();
 
   Sfa3x.begin();
-  String err = Sfa3x.getError();
-  Serial.println(err);
 
   Web.begin();
 }
@@ -26,11 +24,9 @@ void loop() {
   Sfa3x.read();
 
   Web.clearMeasures();
-  Web.setMeasure("Iteration", String(iteration));
-  Web.setMeasure("Error", Sfa3x.getError());
-  Web.setMeasure("Formaldehyde", String(Sfa3x.getFormaldehyde()));
-  Web.setMeasure("Humidity",     String(Sfa3x.getHumidity()));
-  Web.setMeasure("Temperature",  String(Sfa3x.getTemp()));
+
+  Web.pushMeasure({"iteration", iteration * 1.0, "", ""});
+  Web.pushMeasures(Sfa3x.getMeasures());
 
   Web.handleClient();
 }

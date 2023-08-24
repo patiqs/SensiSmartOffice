@@ -8,54 +8,55 @@
 SensirionI2CSfa3x sfa3x;
 Sfa3xClass Sfa3x;
 
-Sfa3xClass::Sfa3xClass(/* args */)
+void Sfa3xClass::begin()
 {
-    _error.reserve(256);
-}
-
-Sfa3xClass::~Sfa3xClass()
-{
-}
-
-void Sfa3xClass::begin(){
     Wire.begin(I2C_SDA, I2C_SCL, 10000UL);
-    //Wire.setClock(10000UL);
-    //Wire.begin();
 
     sfa3x.begin(Wire);
 
+    startMeasurement();
+}
+
+void Sfa3xClass::read()
+{
     uint16_t error;
-    char errorMessage[256];
+    int16_t hcho;
+    int16_t humidity;
+    int16_t temperature;
 
-    sfa3x.begin(Wire);
+    _measures.clear();
+    error = sfa3x.readMeasuredValues(hcho, humidity, temperature);
 
-    // Start Measurement
-    error = sfa3x.startContinuousMeasurement();
-    SetError("Error trying to execute startContinuousMeasurement(): ", error);
-}
-
-void Sfa3xClass::read(){
-  uint16_t error;
-  int16_t hcho;
-  int16_t humidity;
-  int16_t temperature;
-
-  error = sfa3x.readMeasuredValues(hcho, humidity, temperature);
-  _hcho = hcho / 5.0;
-  _humidity = humidity / 100.0;
-  _temperature = temperature/ 200.0;
-
-  SetError("Error trying to execute readMeasuredValues(): ", error);
-}
-
-void Sfa3xClass::SetError(String prefix, uint16_t error){
     if (error)
     {
-        char buffer[256];
-        errorToString(error, buffer, sizeof(buffer));
-        _error = prefix + buffer;
+        SetError("Error trying to execute readMeasuredValues(): ", error);
+        return;
     }
-    else{
-        _error = "No error";
+
+    if (hcho == 0 && humidity == 0 && temperature == 0)
+    {
+        startMeasurement();
+        _measures.push_back({"Error", 0.0, "Restarting", ""});
+        return;
     }
+
+    _measures.push_back({"Formaldehyde", hcho / 5.0, "", "ppb"});
+    _measures.push_back({"Humidity", humidity / 100.0, "", "% RH"});
+    _measures.push_back({"Temperature", temperature / 200.0, "", "Celsius"});
+}
+
+void Sfa3xClass::startMeasurement()
+{
+    uint16_t error;
+    error = sfa3x.startContinuousMeasurement();
+    if (error)
+        SetError("Error trying to execute startContinuousMeasurement(): ", error);
+}
+
+void Sfa3xClass::SetError(String prefix, uint16_t error)
+{
+
+    char buffer[256];
+    errorToString(error, buffer, sizeof(buffer));
+    _measures.push_back({"Error", 0.0, prefix, buffer});
 }
