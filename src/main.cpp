@@ -9,7 +9,7 @@ void setup() {
   Serial.println("\nI2C Scanner");
   pinMode(18, OUTPUT);
 
-  Setup_Wifi();
+  Setup_Wifi_AP();
 
   Sfa3x.begin();
   String err = Sfa3x.getError();
