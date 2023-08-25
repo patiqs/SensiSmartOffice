@@ -1,21 +1,22 @@
+#ifdef WEB
 #include "Web.h"
 #include <WebServer.h>
 
-WebServer server(80);
+WebServer *server;
 
-WebClass::WebClass() {}
+Web::Web() {}
 
-void WebClass::begin()
+void Web::begin()
 {
-  server.on("/", []()
-            { Web.handle_root(); });
-  server.begin();
+  server = new WebServer(80);
+  server->on("/", std::bind(&Web::handle_root, this));
+  server->begin();
   Serial.println("HTTP server started");
 }
 
-void WebClass::handleClient()
+void Web::commitMeasures()
 {
-  server.handleClient();
+  server->handleClient();
 }
 
 // HTML & CSS contents which display on web server
@@ -33,7 +34,7 @@ String HtmlFooter = "\
 </html>";
 
 // Handle root url (/)
-void WebClass::handle_root()
+void Web::handle_root()
 {
   String response = HTMLHeader;
 
@@ -55,17 +56,17 @@ void WebClass::handle_root()
 
   response += HtmlFooter;
 
-  server.send(200, "text/html", response.c_str());
+  server->send(200, "text/html", response.c_str());
 }
 
-void WebClass::pushMeasure(MeasureRecord measure)
+void Web::pushMeasure(MeasureRecord measure)
 {
   _measures.push_back(measure);
 }
 
-void WebClass::pushMeasures(std::vector<MeasureRecord> measures)
+void Web::pushMeasures(std::vector<MeasureRecord> measures)
 {
   _measures.insert(_measures.end(), measures.begin(), measures.end());
 }
 
-WebClass Web;
+#endif /* WEB */

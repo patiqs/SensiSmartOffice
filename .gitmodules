@@ -4,3 +4,6 @@
 [submodule "lib/arduino-i2c-sfa3x"]
 	path = lib/arduino-i2c-sfa3x
 	url = https://github.com/Sensirion/arduino-i2c-sfa3x.git
+[submodule "lib/arduino-ble-gadget"]
+	path = lib/arduino-ble-gadget
+	url = https://github.com/Sensirion/arduino-ble-gadget.git

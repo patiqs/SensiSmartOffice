@@ -1,18 +1,14 @@
-#ifndef WEB_H
-#define WEB_H
-
+#ifndef GATGETBLE_H
+#define GATGETBLE_H
 #include "uiInterface.h"
 
-class Web : public uiInterface
+class GatgetBle : public uiInterface
 {
 public:
-    Web(/* args */);
-    void handle_root();
-
     void begin();
+    void commitMeasures();
     void pushMeasure(MeasureRecord measure);
     void pushMeasures(std::vector<MeasureRecord> measures);
-    void commitMeasures();
 };
 
-#endif /* WEB_H */
+#endif /* GATGETBLE_H */
