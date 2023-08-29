@@ -2,10 +2,12 @@
 #define MEASURERECORD_H
 
 #include <WString.h>
+#include "Sensirion_Gadget_BLE.h"
 
 struct MeasureRecord{
-    String Name;
-    double dVal;
+    String DeviceName;
+    SignalType Type;
+    float fVal;
     String sVal;
     String unit;
 };

@@ -3,6 +3,7 @@
 #include <WebServer.h>
 
 WebServer *server;
+String Map(SignalType st);
 
 Web::Web() {}
 
@@ -41,10 +42,10 @@ void Web::handle_root()
   std::vector<MeasureRecord>::iterator itRecord;
   for (itRecord = _measures.begin(); itRecord != _measures.end(); itRecord++)
   {
-    String s = itRecord->Name + " : ";
+    String s = itRecord->DeviceName + " > " + Map(itRecord->Type) + " : ";
     if (itRecord->sVal == "")
     {
-      s += itRecord->dVal;
+      s += itRecord->fVal;
     }
     else
     {
@@ -67,6 +68,21 @@ void Web::pushMeasure(MeasureRecord measure)
 void Web::pushMeasures(std::vector<MeasureRecord> measures)
 {
   _measures.insert(_measures.end(), measures.begin(), measures.end());
+}
+
+String Map(SignalType st)
+{
+  switch (st)
+  {
+  case SignalType::HCHO_PARTS_PER_BILLION:
+    return "Formaldehyde";
+  case SignalType::TEMPERATURE_DEGREES_CELSIUS:
+    return "Temperature";
+  case SignalType::RELATIVE_HUMIDITY_PERCENTAGE:
+    return "Humidity";
+  default:
+    return "Undefined";
+  }
 }
 
 #endif /* WEB */

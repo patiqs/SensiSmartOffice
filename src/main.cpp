@@ -1,5 +1,6 @@
 #include "main.h"
 #include "Sfa3x.h"
+#include "sensorContainer.h"
 #ifdef WEB
 #include "Web.h"
 #endif
@@ -9,6 +10,7 @@
 
 uiInterface *ui;
 ulong iteration = 0;
+SensorContainer sensors;
 
 void setup()
 {
@@ -16,7 +18,7 @@ void setup()
   Serial.println("\nI2C Scanner");
   pinMode(18, OUTPUT);
 
-  Sfa3x.begin();
+  sensors.begin();
 
 #ifdef WEB
   Setup_Wifi_AP();
@@ -32,16 +34,15 @@ void loop()
 {
   ++iteration;
   Toggle_Status_Led();
-  delay(1000);
+  delay(100);
 
-  Sfa3x.read();
+  sensors.read();
 
-#ifdef WEB
   ui->clearMeasures();
 
-  ui->pushMeasure({"iteration", iteration * 1.0, "", ""});
-  ui->pushMeasures(Sfa3x.getMeasures());
+  ui->pushMeasure({".", SignalType::UNDEFINED, iteration * 1.0F, "", ""});
+
+  ui->pushMeasures(sensors.getMeasures());
 
   ui->commitMeasures();
-#endif
 }

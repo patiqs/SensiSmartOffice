@@ -2,22 +2,17 @@
 #include <SensirionI2CSfa3x.h>
 #include "Sfa3x.h"
 
-#define I2C_SDA 33
-#define I2C_SCL 32
-
 SensirionI2CSfa3x sfa3x;
-Sfa3xClass Sfa3x;
 
-void Sfa3xClass::begin()
+void Sfa3xSensor::begin()
 {
-    Wire.begin(I2C_SDA, I2C_SCL, 10000UL);
-
+    Serial.println("@08291430");
     sfa3x.begin(Wire);
 
     startMeasurement();
 }
 
-void Sfa3xClass::read()
+void Sfa3xSensor::read()
 {
     uint16_t error;
     int16_t hcho;
@@ -36,16 +31,16 @@ void Sfa3xClass::read()
     if (hcho == 0 && humidity == 0 && temperature == 0)
     {
         startMeasurement();
-        _measures.push_back({"Error", 0.0, "Restarting", ""});
+        _measures.push_back({_name, SignalType::UNDEFINED, 0.0F, "Restarting", ""});
         return;
     }
 
-    _measures.push_back({"Formaldehyde", hcho / 5.0, "", "ppb"});
-    _measures.push_back({"Humidity", humidity / 100.0, "", "% RH"});
-    _measures.push_back({"Temperature", temperature / 200.0, "", "Celsius"});
+    _measures.push_back({_name, SignalType::HCHO_PARTS_PER_BILLION, hcho / 5.0F, "", "ppb"});
+    _measures.push_back({_name, SignalType::RELATIVE_HUMIDITY_PERCENTAGE, humidity / 100.0F, "", "% RH"});
+    _measures.push_back({_name, SignalType::TEMPERATURE_DEGREES_CELSIUS, temperature / 200.0F, "", "Celsius"});
 }
 
-void Sfa3xClass::startMeasurement()
+void Sfa3xSensor::startMeasurement()
 {
     uint16_t error;
     error = sfa3x.startContinuousMeasurement();
@@ -53,10 +48,10 @@ void Sfa3xClass::startMeasurement()
         SetError("Error trying to execute startContinuousMeasurement(): ", error);
 }
 
-void Sfa3xClass::SetError(String prefix, uint16_t error)
+void Sfa3xSensor::SetError(String prefix, uint16_t error)
 {
 
     char buffer[256];
     errorToString(error, buffer, sizeof(buffer));
-    _measures.push_back({"Error", 0.0, prefix, buffer});
+    _measures.push_back({_name, SignalType::UNDEFINED, 0.0F, prefix, buffer});
 }
