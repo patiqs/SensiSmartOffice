@@ -3,32 +3,26 @@
 #include "Sensirion_Gadget_BLE.h"
 
 NimBLELibraryWrapper lib;
-DataProvider provider(lib, DataType::T_RH_CO2_VOC_PM25_HCHO_V2);
+DataProvider *provider;
 
 void GatgetBle::begin()
 {
-  provider.begin();
+  sampleConfigSelector[DataType::T_RH_V3].sampleType = (uint8_t)-1;
+  provider = new DataProvider(lib);
+  provider->begin();
+  provider->setSampleConfig(DataType::T_RH_CO2_VOC_PM25_HCHO_V2);
   Serial.print("Sensirion GadgetBle Lib initialized with deviceId = ");
-  Serial.println(provider.getDeviceIdString());
-}
-
-void GatgetBle::pushMeasure(MeasureRecord measure)
-{
-  provider.writeValueToCurrentSample(5.0, SignalType::TEMPERATURE_DEGREES_CELSIUS);
-  provider.writeValueToCurrentSample(5.0, SignalType::HCHO_PARTS_PER_BILLION);
-  provider.commitSample();
-}
-
-void GatgetBle::pushMeasures(std::vector<MeasureRecord> measures)
-{
-  std::for_each(measures.begin(), measures.end(), [](MeasureRecord m)
-                { provider.writeValueToCurrentSample(m.fVal, m.Type); });
-  provider.commitSample();
+  Serial.println(provider->getDeviceIdString());
 }
 
 void GatgetBle::commitMeasures()
 {
-  provider.handleDownload();
+  provider->commitSample();
+  provider->handleDownload();
 }
+
+void GatgetBle::visit(InfoRecord *record) {}
+void GatgetBle::visit(ErrorRecord *record) {}
+void GatgetBle::visit(MeasureRecord *record) { provider->writeValueToCurrentSample(record->Value, record->Type); }
 
 #endif /* BLE */

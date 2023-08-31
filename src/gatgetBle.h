@@ -7,8 +7,10 @@ class GatgetBle : public uiInterface
 public:
     void begin();
     void commitMeasures();
-    void pushMeasure(MeasureRecord measure);
-    void pushMeasures(std::vector<MeasureRecord> measures);
+
+    void visit(InfoRecord* record);
+    void visit(ErrorRecord* record);
+    void visit(MeasureRecord* record);
 };
 
 #endif /* GATGETBLE_H */

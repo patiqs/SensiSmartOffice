@@ -34,15 +34,14 @@ void loop()
 {
   ++iteration;
   Toggle_Status_Led();
-  delay(100);
+  delay(1000);
+
+  auto info = InfoRecord("Iteration", String(iteration));
+  ui->visit(&info);
 
   sensors.read();
 
-  ui->clearMeasures();
-
-  ui->pushMeasure({".", SignalType::UNDEFINED, iteration * 1.0F, "", ""});
-
-  ui->pushMeasures(sensors.getMeasures());
+  sensors.print(ui);
 
   ui->commitMeasures();
 }

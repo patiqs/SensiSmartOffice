@@ -1,5 +1,6 @@
 #include "sensorContainer.h"
 #include "Sfa3x.h"
+#include "Scd4x.h"
 #include <algorithm>
 #include <Wire.h>
 #include <Arduino.h>
@@ -9,13 +10,17 @@
 
 void SensorContainer::begin()
 {
+    pinMode(I2C_SDA, OUTPUT | PULLUP);
+    pinMode(I2C_SCL, OUTPUT | PULLUP);
+
     Wire.begin(I2C_SDA, I2C_SCL, 10000UL);
 
-    _sensors.push_back(new Sfa3xSensor("Sfa3x"));
-    _sensors.push_back(new Sfa3xSensor("Sfa3x2"));
+    _sensors.push_back(new Scd4xSensor("Scd4x", this));
+    _sensors.push_back(new Sfa3xSensor("Sfa3x", this));
 
     forEachSensors([](Sensor *sensor)
-                   { sensor->begin(); });
+                   {sensor->begin();
+                   delay(500); });
 }
 
 void SensorContainer::read()
@@ -24,19 +29,17 @@ void SensorContainer::read()
                    { sensor->read(); });
 }
 
-std::vector<MeasureRecord> SensorContainer::getMeasures()
+void SensorContainer::print(uiInterface *ui)
 {
-    std::vector<MeasureRecord> measures;
-
-    forEachSensors([&](Sensor *sensor)
-                   {
-            std::vector<MeasureRecord> sm = sensor->getMeasures();
-        measures.insert(measures.end(), sm.begin(), sm.end()); });
-
-    return measures;
+    while (!_records.empty())
+    {
+        Record *record = _records.front();
+        Serial.println(record->toString());
+        record->accept(ui);
+        _records.pop();
+        delete record;
+    }
 }
-
-void AddMeasure(std::vector<MeasureRecord> measures) {}
 
 template <typename _Function>
 void SensorContainer::forEachSensors(_Function func)

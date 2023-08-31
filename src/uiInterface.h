@@ -3,16 +3,18 @@
 #include <vector>
 #include "measureRecord.h"
 
+struct InfoRecord;
+struct ErrorRecord;
+struct MeasureRecord;
 class uiInterface
 {
-protected:
-    std::vector<MeasureRecord> _measures;
-
 public:
     virtual void begin() = 0;
-    void clearMeasures() { _measures.clear(); }
-    virtual void pushMeasure(MeasureRecord measure) = 0;
-    virtual void pushMeasures(std::vector<MeasureRecord> measures) = 0;
+
+    virtual void visit(InfoRecord* record) = 0;
+    virtual void visit(ErrorRecord* record) = 0;
+    virtual void visit(MeasureRecord* record) = 0;
+
     virtual void commitMeasures() = 0;
 };
 

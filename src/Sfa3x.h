@@ -6,13 +6,10 @@
 class Sfa3xSensor : public Sensor
 {
 private:
-    void SetError(String prefix, uint16_t error);
     void startMeasurement();
 
 public:
-    Sfa3xSensor(const char *name) : Sensor(name){};
-
-    std::vector<MeasureRecord> getMeasures() { return _measures; };
+    Sfa3xSensor(const char *name, SensorContainer *parent) : Sensor(name, parent){};
 
     void begin();
     void read();

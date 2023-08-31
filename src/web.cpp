@@ -5,8 +5,6 @@
 WebServer *server;
 String Map(SignalType st);
 
-Web::Web() {}
-
 void Web::begin()
 {
   server = new WebServer(80);
@@ -39,50 +37,17 @@ void Web::handle_root()
 {
   String response = HTMLHeader;
 
-  std::vector<MeasureRecord>::iterator itRecord;
-  for (itRecord = _measures.begin(); itRecord != _measures.end(); itRecord++)
-  {
-    String s = itRecord->DeviceName + " > " + Map(itRecord->Type) + " : ";
-    if (itRecord->sVal == "")
-    {
-      s += itRecord->fVal;
-    }
-    else
-    {
-      s += itRecord->sVal;
-    }
-    Serial.println(s.c_str());
-    response += "<p>" + s + "</p>";
-  }
+  std::vector<String>::iterator itRecord;
+  std::for_each(_records.begin(), _records.end(), [&](String record){response+=record;});
+  _records.clear();
 
   response += HtmlFooter;
 
   server->send(200, "text/html", response.c_str());
 }
 
-void Web::pushMeasure(MeasureRecord measure)
-{
-  _measures.push_back(measure);
-}
-
-void Web::pushMeasures(std::vector<MeasureRecord> measures)
-{
-  _measures.insert(_measures.end(), measures.begin(), measures.end());
-}
-
-String Map(SignalType st)
-{
-  switch (st)
-  {
-  case SignalType::HCHO_PARTS_PER_BILLION:
-    return "Formaldehyde";
-  case SignalType::TEMPERATURE_DEGREES_CELSIUS:
-    return "Temperature";
-  case SignalType::RELATIVE_HUMIDITY_PERCENTAGE:
-    return "Humidity";
-  default:
-    return "Undefined";
-  }
-}
+void Web::visit(InfoRecord *record) {_records.push_back("<p>" + record->toString()+ "</p>");}
+void Web::visit(ErrorRecord *record) {_records.push_back("<p>" + record->toString()+ "</p>");}
+void Web::visit(MeasureRecord *record) {_records.push_back("<p>" + record->toString()+ "</p>");}
 
 #endif /* WEB */

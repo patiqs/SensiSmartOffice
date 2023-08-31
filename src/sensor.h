@@ -2,21 +2,28 @@
 #define SENSOR_H
 
 #include "measureRecord.h"
+#include "sensorContainer.h"
 #include <vector>
 
+class SensorContainer;
 class Sensor
 {
 private:
     Sensor() {}
 
 protected:
-    Sensor(const char *name) { _name = name; }
+    Sensor(const char *name, SensorContainer* parent)
+    {
+        _name = name;
+        _parent = parent;
+    }
     String _name;
-    std::vector<MeasureRecord> _measures;
+    SensorContainer* _parent;
+
+    void HandleError(String prefix, uint16_t error);
+
 
 public:
-    std::vector<MeasureRecord> getMeasures() { return _measures; };
-
     virtual void begin() = 0;
     virtual void read() = 0;
 };

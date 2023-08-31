@@ -5,14 +5,17 @@
 
 class Web : public uiInterface
 {
+private:
+    std::vector<String> _records;
 public:
-    Web(/* args */);
     void handle_root();
 
     void begin();
-    void pushMeasure(MeasureRecord measure);
-    void pushMeasures(std::vector<MeasureRecord> measures);
     void commitMeasures();
+
+    void visit(InfoRecord* record);
+    void visit(ErrorRecord* record);
+    void visit(MeasureRecord* record);
 };
 
 #endif /* WEB_H */
