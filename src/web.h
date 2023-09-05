@@ -3,6 +3,9 @@
 
 #include "uiInterface.h"
 
+void Setup_Wifi();
+void Setup_Wifi_AP();
+
 class Web : public uiInterface
 {
 private:
@@ -12,6 +15,7 @@ public:
 
     void begin();
     void commitMeasures();
+    void handleNetwork();
 
     void visit(InfoRecord* record);
     void visit(ErrorRecord* record);

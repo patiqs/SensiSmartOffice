@@ -16,6 +16,7 @@ public:
     virtual void visit(MeasureRecord* record) = 0;
 
     virtual void commitMeasures() = 0;
+    virtual void handleNetwork() = 0;
 };
 
 #endif /* UIINTERFACE_H */

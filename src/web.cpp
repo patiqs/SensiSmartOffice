@@ -15,6 +15,10 @@ void Web::begin()
 
 void Web::commitMeasures()
 {
+}
+
+void Web::handleNetwork()
+{
   server->handleClient();
 }
 

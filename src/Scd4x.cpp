@@ -1,4 +1,3 @@
-#include "main.h"
 #include <SensirionI2CScd4x.h>
 #include "Scd4x.h"
 

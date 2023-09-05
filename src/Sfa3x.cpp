@@ -1,4 +1,3 @@
-#include "main.h"
 #include <SensirionI2CSfa3x.h>
 #include "Sfa3x.h"
 

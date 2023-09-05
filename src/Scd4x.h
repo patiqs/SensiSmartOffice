@@ -9,7 +9,7 @@ private:
     uint16_t co2 = 0;
     float temperature = 0.0f;
     float humidity = 0.0f;
-     int64_t lastMeasurementTimeMs = 0;
+    int64_t lastMeasurementTimeMs = 0;
     void startMeasurement();
     void pushRecords();
 

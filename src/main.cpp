@@ -1,4 +1,3 @@
-#include "main.h"
 #include "Sfa3x.h"
 #include "sensorContainer.h"
 #ifdef WEB
@@ -11,6 +10,8 @@
 uiInterface *ui;
 ulong iteration = 0;
 SensorContainer sensors;
+static int measurementIntervalMs = 5000;
+int64_t lastMeasurementTimeMs = 0;
 
 void setup()
 {
@@ -21,7 +22,6 @@ void setup()
   sensors.begin();
 
 #ifdef WEB
-  Setup_Wifi_AP();
   ui = new Web();
 #endif
 #ifdef BLE
@@ -33,15 +33,22 @@ void setup()
 void loop()
 {
   ++iteration;
-  Toggle_Status_Led();
-  delay(1000);
 
-  auto info = InfoRecord("Iteration", String(iteration));
-  ui->visit(&info);
+  if (millis() - measurementIntervalMs >= lastMeasurementTimeMs)
+  {
+    lastMeasurementTimeMs = millis();
 
-  sensors.read();
+    auto info = InfoRecord("Iteration", String(iteration));
+    ui->visit(&info);
 
-  sensors.print(ui);
+    sensors.read();
 
-  ui->commitMeasures();
+    sensors.print(ui);
+
+    ui->commitMeasures();
+    delay(500);
+  };
+  
+  ui->handleNetwork();
+  delay(3);
 }

@@ -7,6 +7,7 @@ class GatgetBle : public uiInterface
 public:
     void begin();
     void commitMeasures();
+    void handleNetwork();
 
     void visit(InfoRecord* record);
     void visit(ErrorRecord* record);
