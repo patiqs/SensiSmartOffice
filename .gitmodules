@@ -6,7 +6,8 @@
 	url = https://github.com/Sensirion/arduino-i2c-sfa3x.git
 [submodule "lib/arduino-ble-gadget"]
 	path = lib/arduino-ble-gadget
-	url = https://github.com/Sensirion/arduino-ble-gadget.git
+	url = https://github.com/patiqs/arduino-ble-gadget.git
+	branch = FixDownload
 [submodule "lib/arduino-i2c-scd4x"]
 	path = lib/arduino-i2c-scd4x
 	url = https://github.com/Sensirion/arduino-i2c-scd4x.git

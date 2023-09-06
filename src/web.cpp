@@ -1,4 +1,4 @@
-#ifdef WEB
+#if defined(WEB) || defined(Compaund)
 #include "Web.h"
 #include <WebServer.h>
 
@@ -7,6 +7,7 @@ String Map(SignalType st);
 
 void Web::begin()
 {
+  Setup_Wifi_AP();
   server = new WebServer(80);
   server->on("/", std::bind(&Web::handle_root, this));
   server->begin();
@@ -26,11 +27,11 @@ void Web::handleNetwork()
 String HTMLHeader = "<!DOCTYPE html>\
 <html>\
 <head>\
-    <title>ESP32 & SFA31</title>\
-    <meta http-equiv=\"refresh\" content=\"2\">\
+    <title>Sensirion BLE</title>\
+    <meta http-equiv=\"refresh\" content=\"5\">\
 </head>\
 <body>\
-<h1>Web Server with ESP32 and SFA31 &#128522;</h1>";
+<h1>Web Server with ESP32 &#128522;</h1>";
 
 String HtmlFooter = "\
 </body>\
@@ -41,17 +42,26 @@ void Web::handle_root()
 {
   String response = HTMLHeader;
 
-  std::vector<String>::iterator itRecord;
-  std::for_each(_records.begin(), _records.end(), [&](String record){response+=record;});
-  _records.clear();
+  std::for_each(_records.rbegin(), _records.rend(), [&](String record)
+                { response += record; });
+  //_records.clear();
 
   response += HtmlFooter;
 
   server->send(200, "text/html", response.c_str());
 }
 
-void Web::visit(InfoRecord *record) {_records.push_back("<p>" + record->toString()+ "</p>");}
-void Web::visit(ErrorRecord *record) {_records.push_back("<p>" + record->toString()+ "</p>");}
-void Web::visit(MeasureRecord *record) {_records.push_back("<p>" + record->toString()+ "</p>");}
+void Web::visit(InfoRecord *record) { push_back("<p>" + record->toString() + "</p>"); }
+void Web::visit(ErrorRecord *record) { push_back("<p>" + record->toString() + "</p>"); }
+void Web::visit(MeasureRecord *record) { push_back("<p>" + record->toString() + "</p>"); }
+
+void Web::push_back(String entry)
+{
+  _records.push_back(entry);
+  while (_records.size() > 30)
+  {
+    _records.erase(_records.begin());
+  }
+}
 
 #endif /* WEB */

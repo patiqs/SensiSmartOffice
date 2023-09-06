@@ -6,6 +6,9 @@
 #ifdef BLE
 #include "gatgetBle.h"
 #endif
+#ifdef Compaund
+#include "compaundUi.h"
+#endif
 
 uiInterface *ui;
 ulong iteration = 0;
@@ -27,6 +30,10 @@ void setup()
 #ifdef BLE
   ui = new GatgetBle();
 #endif
+#ifdef Compaund
+  ui = new CompaundUi();
+#endif
+
   ui->begin();
 }
 

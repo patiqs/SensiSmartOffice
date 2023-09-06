@@ -1,17 +1,17 @@
-#ifdef BLE
+#if defined(BLE) || defined(Compaund)
 #include "gatgetBle.h"
 #include "Sensirion_Gadget_BLE.h"
-#include "WifiMultiLibraryWrapper.h"
+//#include "WifiMultiLibraryWrapper.h"
 
 NimBLELibraryWrapper lib;
-WifiMultiLibraryWrapper wifi;
+//WifiMultiLibraryWrapper wifi;
 
 DataProvider *provider;
 
 void GatgetBle::begin()
 {
   sampleConfigSelector[DataType::T_RH_V3].sampleType = (uint8_t)-1;
-  provider = new DataProvider(lib, DataType::T_RH_V3, true, false, &wifi);
+  //provider = new DataProvider(lib, DataType::T_RH_V3, true, false, &wifi);
   provider = new DataProvider(lib);
   provider->begin();
   provider->setSampleConfig(DataType::T_RH_CO2_VOC_PM25_HCHO);

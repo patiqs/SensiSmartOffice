@@ -1,21 +1,14 @@
-#ifndef WEB_H
-#define WEB_H
+#ifndef COMPAUNDUI_H
+#define COMPAUNDUI_H
 
 #include "uiInterface.h"
-#include <vector>
 
-void Setup_Wifi();
-void Setup_Wifi_AP();
-
-class Web : public uiInterface
+class CompaundUi : public uiInterface
 {
 private:
-    std::vector<String> _records;
-    void push_back(String entry);
+    std::vector<uiInterface*> _children;
 
 public:
-    void handle_root();
-
     void begin();
     void commitMeasures();
     void handleNetwork();
@@ -25,4 +18,4 @@ public:
     void visit(MeasureRecord* record);
 };
 
-#endif /* WEB_H */
+#endif /*COMPAUNDUI_H*/

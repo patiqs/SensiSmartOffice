@@ -1,6 +1,6 @@
 #ifndef UIINTERFACE_H
 #define UIINTERFACE_H
-#include <vector>
+
 #include "measureRecord.h"
 
 struct InfoRecord;
