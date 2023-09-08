@@ -1,6 +1,7 @@
 #include "sensorContainer.h"
 #include "Sfa3x.h"
 #include "Scd4x.h"
+#include "Sen5x.h"
 #include <algorithm>
 #include <Wire.h>
 #include <Arduino.h>
@@ -17,6 +18,7 @@ void SensorContainer::begin()
 
     _sensors.push_back(new Scd4xSensor("Scd4x", this));
     _sensors.push_back(new Sfa3xSensor("Sfa3x", this));
+    _sensors.push_back(new Sen5xSensor("Sen5x", this));
 
     forEachSensors([](Sensor *sensor)
                    {sensor->begin();

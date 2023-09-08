@@ -11,3 +11,6 @@
 [submodule "lib/arduino-i2c-scd4x"]
 	path = lib/arduino-i2c-scd4x
 	url = https://github.com/Sensirion/arduino-i2c-scd4x.git
+[submodule "lib/arduino-i2c-sen5x"]
+	path = lib/arduino-i2c-sen5x
+	url = https://github.com/Sensirion/arduino-i2c-sen5x.git

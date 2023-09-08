@@ -31,9 +31,9 @@ void Sfa3xSensor::read()
         return;
     }
 
-    _parent->push(new MeasureRecord(_name, SignalType::HCHO_PARTS_PER_BILLION, hcho / 5.0F, "ppb"));
-    _parent->push(new MeasureRecord(_name, SignalType::RELATIVE_HUMIDITY_PERCENTAGE, humidity / 100.0F, "% RH"));
-    _parent->push(new MeasureRecord(_name, SignalType::TEMPERATURE_DEGREES_CELSIUS, temperature / 200.0F, "Celsius"));
+    _parent->push(new MeasureRecord(_name, SignalType::HCHO_PARTS_PER_BILLION, hcho / 5.0F));
+    _parent->push(new MeasureRecord(_name, SignalType::RELATIVE_HUMIDITY_PERCENTAGE, humidity / 100.0F));
+    _parent->push(new MeasureRecord(_name, SignalType::TEMPERATURE_DEGREES_CELSIUS, temperature / 200.0F));
 }
 
 void Sfa3xSensor::startMeasurement()

@@ -44,9 +44,9 @@ void Scd4xSensor::read()
 
 void Scd4xSensor::pushRecords()
 {
-    _parent->push(new MeasureRecord(_name, SignalType::CO2_PARTS_PER_MILLION, co2 * 1.0F, "ppm"));
-    _parent->push(new MeasureRecord(_name, SignalType::RELATIVE_HUMIDITY_PERCENTAGE, humidity, "% RH"));
-    _parent->push(new MeasureRecord(_name, SignalType::TEMPERATURE_DEGREES_CELSIUS, temperature, "Celsius"));
+    _parent->push(new MeasureRecord(_name, SignalType::CO2_PARTS_PER_MILLION, co2 * 1.0F));
+    _parent->push(new MeasureRecord(_name, SignalType::RELATIVE_HUMIDITY_PERCENTAGE, humidity));
+    _parent->push(new MeasureRecord(_name, SignalType::TEMPERATURE_DEGREES_CELSIUS, temperature));
 }
 
 void Scd4xSensor::startMeasurement()

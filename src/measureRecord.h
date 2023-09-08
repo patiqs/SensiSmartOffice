@@ -47,20 +47,18 @@ struct MeasureRecord : Record
 {
     SignalType Type;
     float Value;
-    String Unit;
 
     MeasureRecord(
         String deviceName,
         SignalType type,
-        float value,
-        String unit)
-        : Record(deviceName), Type(type), Value(value), Unit(unit){};
+        float value)
+        : Record(deviceName), Type(type), Value(value){};
 
     void accept(uiInterface *ui);
 
-    String toString() { return DeviceName + " > " + map(Type) + " : " + Value + Unit; }
+    String toString() { return DeviceName + " > " + mapName(Type) + " : " + Value + mapUnit(Type); }
 
-    String map(SignalType st)
+    String mapName(SignalType st)
     {
         switch (st)
         {
@@ -72,6 +70,31 @@ struct MeasureRecord : Record
             return "CO2";
         case SignalType::HCHO_PARTS_PER_BILLION:
             return "Formaldehyde";
+        case SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER:
+            return "PM2.5";
+        case SignalType::VOC_INDEX:
+            return "VOC";
+        default:
+            return "Undefined";
+        }
+    }
+    
+    String mapUnit(SignalType st)
+    {
+        switch (st)
+        {
+        case SignalType::TEMPERATURE_DEGREES_CELSIUS:
+            return "Celsius";
+        case SignalType::RELATIVE_HUMIDITY_PERCENTAGE:
+            return "%";
+        case SignalType::CO2_PARTS_PER_MILLION:
+            return "ppm";
+        case SignalType::HCHO_PARTS_PER_BILLION:
+            return "Formaldehyde";
+        case SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER:
+            return "ug/m3";
+        case SignalType::VOC_INDEX:
+            return "";
         default:
             return "Undefined";
         }
