@@ -16,9 +16,9 @@ void SensorContainer::begin()
 
     Wire.begin(I2C_SDA, I2C_SCL, 10000UL);
 
-    _sensors.push_back(new Scd4xSensor("Scd4x", this));
-    _sensors.push_back(new Sfa3xSensor("Sfa3x", this));
-    _sensors.push_back(new Sen5xSensor("Sen5x", this));
+    // _sensors.push_back(new Scd4xSensor("Scd4x", this));
+    // _sensors.push_back(new Sfa3xSensor("Sfa3x", this));
+    // _sensors.push_back(new Sen5xSensor("Sen5x", this));
 
     forEachSensors([](Sensor *sensor)
                    {sensor->begin();
@@ -31,12 +31,13 @@ void SensorContainer::read()
                    { sensor->read(); });
 }
 
-void SensorContainer::print(uiInterface *ui)
+void SensorContainer::accept(uiInterface *ui)
 {
     while (!_records.empty())
     {
         Record *record = _records.front();
-        Serial.println(record->toString());
+        //Serial.println(record->toString());
+        Serial.print(_records.size());
         record->accept(ui);
         _records.pop();
         delete record;

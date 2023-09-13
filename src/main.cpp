@@ -41,6 +41,9 @@ void loop()
 {
   ++iteration;
 
+  auto measure = MeasureRecord("Main", SignalType::CO2_PARTS_PER_MILLION, iteration);
+  ui->visit(&measure);
+
   if (millis() - measurementIntervalMs >= lastMeasurementTimeMs)
   {
     lastMeasurementTimeMs = millis();
@@ -50,7 +53,7 @@ void loop()
 
     sensors.read();
 
-    sensors.print(ui);
+    sensors.accept(ui);
 
     ui->commitMeasures();
     delay(500);

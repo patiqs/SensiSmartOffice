@@ -20,7 +20,7 @@ public:
     void read();
     void push(Record* record) {_records.push(record);}
 
-    void print(uiInterface* ui);
+    void accept(uiInterface* ui);
 };
 
 #endif /* SENSORCONTAINER_H */
