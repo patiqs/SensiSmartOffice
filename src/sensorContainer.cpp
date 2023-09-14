@@ -25,10 +25,13 @@ void SensorContainer::begin()
                    delay(500); });
 }
 
+int iterationx;
 void SensorContainer::read()
 {
     forEachSensors([](Sensor *sensor)
                    { sensor->read(); });
+    MeasureRecord* measure = new MeasureRecord("SensorContainer", SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER, ++iterationx % 1000);
+    _records.push(measure);
 }
 
 void SensorContainer::accept(uiInterface *ui)
