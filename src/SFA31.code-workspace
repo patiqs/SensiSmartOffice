@@ -17,10 +17,6 @@
 		{
 			"name": "Example4_WiFiSetupViaBle",
 			"path": "../../arduino-ble-gadget/examples/Example4_WiFiSetupViaBle"
-		},
-		{
-			"name": "arduino-i2c-sfa3x",
-			"path": "../../arduino-i2c-sfa3x"
 		}
 	],
 	"settings": {
