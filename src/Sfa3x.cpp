@@ -16,7 +16,7 @@ void Sfa3xSensor::read()
     int16_t humidity;
     int16_t temperature;
 
-    // error = sfa3x.readMeasuredValues(hcho, humidity, temperature);
+    error = sfa3x.readMeasuredValues(hcho, humidity, temperature);
 
     // if (error)
     // {
