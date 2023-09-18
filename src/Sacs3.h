@@ -26,16 +26,15 @@ private:
 
 /*  Machine States
  *    0 = In T_Sync period 
- *    1 = T_Sync period is over, saving T_Sync period duration into ulTSyncTime variable and steping into the next (2) state
- *    2 = In T_Temp period  
- *    3 = T_Temp period is over, saving T_Temp period duration into ulTTempTime variable and steping into the next (4) state
- *    4 = In T_RH period  
- *    5 = T_RH period is over, saving T_RH period duration into ulTRHTime variable and steping into the first (0) state
+ *    1 = In T_Temp period  
+ *    2 = In T_RH period  
  */
 
     int64_t lastMeasurementTimeMs = 0;
     void startMeasurement();
     void pushRecords();
+    void FindTSync();
+    void IsEvalStateRight();
 
 
 public:
@@ -44,6 +43,8 @@ public:
     void begin();
     void pulseISR();
     void read();
+
+
 };
 
 #endif /* SACS3_H */

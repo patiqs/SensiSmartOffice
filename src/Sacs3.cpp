@@ -1,68 +1,17 @@
 #include "Sacs3.h"
 
-//
-// static int measurementIntervalMs = 5100;
-//
 
 void SACS3Sensor::begin()
 {
-
-    attachInterrupt(digitalPinToInterrupt(interruptPin), LowPulse, FALLING);
-    
+    attachInterrupt(digitalPinToInterrupt(interruptPin), LowPulse, FALLING);  
 }
 
 void SACS3Sensor::read()
 {
+    IsEvalStateRight();
+    FindTSync();
 
-
-    if (boolTSyncFoundState == false) {
-        _parent->push(new InfoRecord(_name, "Detecting synchronization pulse."));
-        pushRecords();
-        FindTSync();
-        return;
-    }
-    else if (boolTSyncFoundState == true && MachineState == 1) { 
-        ulTSyncTime = ulTimeDifInMicros;
-        MachineState++;
-        return;
-    }
-    else if (boolTSyncFoundState == true && MachineState == 3) {
-        ulTTempTime = ulTimeDifInMicros; 
-        MachineState++;  
-        return; 
-    }
-    else if (boolTSyncFoundState == true && MachineState == 5) { 
-        ulTRHTime = ulTimeDifInMicros; 
-        boolNewValueRegistered = true;
-        MachineState = 0;  
-        return;
-    }
-
-    
-    if (millis() - lastMeasurementTimeMs < measurementIntervalMs)
-    {
-        _parent->push(new InfoRecord(_name, "Waiting for next data"));
-        pushRecords();
-        return;
-    };
-    lastMeasurementTimeMs = millis();
-    uint16_t error;
-
-    error = sen5x.readMeasuredValues(massConcentrationPm1p0, massConcentrationPm2p5, massConcentrationPm4p0, massConcentrationPm10p0, ambientHumidity, ambientTemperature, vocIndex, noxIndex);
-    if (error)
-    {
-        HandleError("Error trying to execute readMeasuredValues(): ", error);
-        error = sen5x.deviceReset();
-        HandleError("Error trying to execute deviceReset(): ", error);
-        startMeasurement();
-        return;
-    }
-    if (ambientHumidity == 0 && ambientTemperature == 0)
-    {
-        startMeasurement();
-        _parent->push(new ErrorRecord(_name, "Restarting"));
-        return;
-    }
+    ExtractData();
 
     pushRecords();
 }
@@ -71,18 +20,17 @@ void SACS3Sensor::read()
 
 void SACS3Sensor::pushRecords()
 {
-    _parent->push(new MeasureRecord(_name, SignalType::RELATIVE_HUMIDITY_PERCENTAGE, ambientHumidity));
-    _parent->push(new MeasureRecord(_name, SignalType::TEMPERATURE_DEGREES_CELSIUS, ambientTemperature));
-    //_parent->push(new MeasureRecord(_name, SignalType::NOX_INDEX, noxIndex));
+    _parent->push(new MeasureRecord(_name, SignalType::RELATIVE_HUMIDITY_PERCENTAGE, relativehumidity));
+    _parent->push(new MeasureRecord(_name, SignalType::TEMPERATURE_DEGREES_CELSIUS, temperatureincelsius));
+//    _parent->push(new MeasureRecord(_name, SignalType::TEMPERATURE_DEGREES_FAHRENHEIT, temperatureinfahrenheit));
 }
 
 
 
-void SACS3Sensor::startMeasurement()
+void SACS3Sensor::ExtractData()
 {
-    uint16_t error;
-    error = sen5x.startMeasurement();
-    HandleError("Error trying to execute startContinuousMeasurement(): ", error);
+  ftemp = (((ulTTempTime/(float)ulTSyncTime)*131104-14472)/51095.0)*175-45 ; 
+  fhumidity = (((ulTRHTime/(float)ulTSyncTime)*131104-14472)/51095.0)*100 ;
 }
 
 
@@ -93,16 +41,50 @@ IRAM_ATTR void SACS3Sensor::pulseISR()
     // This number will overflow (go back to zero), after approximately 70 minutes.
     ulTimeDifInMicros = ulNewTimeInMicros - ulLastTimeInMicros; 
     ulLastTimeInMicros = ulNewTimeInMicros;
-    if(boolTSyncFoundState == true) MachineState++;
-
+    if(boolTSyncFoundState == true) {
+        if (SACS3MachineState == 0) { 
+        ulTSyncTime = ulTimeDifInMicros;
+        SACS3MachineState++;
+        }
+        else if (SACS3MachineState == 1){
+        ulTTempTime = ulTimeDifInMicros; 
+        SACS3MachineState++;  
+        }
+        else if (SACS3MachineState == 2){
+        ulTRHTime = ulTimeDifInMicros; 
+        SACS3MachineState = 0;  
+        }
+    }
 }
 
 
 
 void SACS3Sensor::FindTSync()
 {
-  if (ulTimeDifInMicros > 170000 && ulTimeDifInMicros < 240000) {
-    boolTSyncFoundState = true;
-    MachineState++;
-     }
+    while(!boolTSyncFoundState) {
+        if (ulTimeDifInMicros < 170000 && ulTimeDifInMicros > 240000) {
+            boolTSyncFoundState == false;
+        }
+        else {
+            boolTSyncFoundState = true;
+            SACS3MachineState = 0;
+        }
+    }
+}
+
+
+
+void SAC3Sensor::IsEvalStateRight()
+{
+    if (ulTSyncTime < 170000 && ulTSyncTime != 0) { // if the sensor is removed and reconnected, the device may lose T_Sync period, which therefore must be found again 
+        boolTSyncFoundState = false;
+        SACS3MachineState = 0;
+        ulNewTimeInMicros = 0;
+        ulLastTimeInMicros = 0;
+        ulTimeDifInMicros = 0;
+        ulTSyncTime = 0;
+        ulTTempTime = 0;
+        ulTRHTime = 0;
+    }
+
 }
