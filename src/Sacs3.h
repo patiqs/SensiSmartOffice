@@ -11,7 +11,7 @@ private:
     float temperatureinfahrenheit = 0.0f;
 
     unsigned long ulNewTimeInMicros = 0; 
-    unsigned long ulLastTimeInMicros = 0;
+    unsigned long ulPrevTimeInMicros = 0;
     unsigned long ulTimeDifInMicros = 0;
 
     unsigned long ulTSyncTime = 0;
@@ -22,7 +22,7 @@ private:
     bool boolLedState = false;
     bool boolNewValueRegistered = false;
 
-    usnigned short SACS3MachineState = 0;
+    unsigned short SACS3MachineState = 0;
 
 /*  Machine States
  *    0 = In T_Sync period 
@@ -31,17 +31,18 @@ private:
  */
 
     int64_t lastMeasurementTimeMs = 0;
-    void startMeasurement();
-    void pushRecords();
+    
     void FindTSync();
-    void IsEvalStateRight();
+    void ExtractData(); 
+    void pushRecords();
+    void StateReset();
 
 
 public:
     SACS3Sensor(const char *name, SensorContainer *parent) : Sensor(name, parent){};
 
     void begin();
-    void pulseISR();
+    IRAM_ATTR void pulseISR();
     void read();
 
 
