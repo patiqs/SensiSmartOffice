@@ -8,7 +8,7 @@ void Sfa3xSensor::begin()
     sfa3x.begin(Wire);
     startMeasurement();
 }
-int xx;
+
 void Sfa3xSensor::read()
 {
     uint16_t error;
@@ -30,8 +30,6 @@ void Sfa3xSensor::read()
     //     _parent->push(new ErrorRecord(_name, "Restarting"));
     //     return;
     // }
-
-    hcho = ++xx % 100;
 
     _parent->push(new MeasureRecord(_name, SignalType::HCHO_PARTS_PER_BILLION, hcho / 5.0F));
     _parent->push(new MeasureRecord(_name, SignalType::RELATIVE_HUMIDITY_PERCENTAGE, humidity / 100.0F));

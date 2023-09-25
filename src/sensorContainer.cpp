@@ -18,20 +18,17 @@ void SensorContainer::begin()
 
     // _sensors.push_back(new Scd4xSensor("Scd4x", this));
     _sensors.push_back(new Sfa3xSensor("Sfa3x", this));
-    // _sensors.push_back(new Sen5xSensor("Sen5x", this));
+    //_sensors.push_back(new Sen5xSensor("Sen5x", this));
 
     forEachSensors([](Sensor *sensor)
                    {sensor->begin();
                    delay(500); });
 }
 
-int iterationx;
 void SensorContainer::read()
 {
     forEachSensors([](Sensor *sensor)
                    { sensor->read(); });
-    MeasureRecord* measure = new MeasureRecord("SensorContainer", SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER, ++iterationx % 1000);
-    _records.push(measure);
 }
 
 void SensorContainer::accept(uiInterface *ui)
@@ -39,7 +36,7 @@ void SensorContainer::accept(uiInterface *ui)
     while (!_records.empty())
     {
         Record *record = _records.front();
-        //Serial.println(record->toString());
+        // Serial.println(record->toString());
         Serial.print(_records.size());
         record->accept(ui);
         _records.pop();

@@ -24,20 +24,20 @@ void Sen5xSensor::read()
     uint16_t error;
 
     error = sen5x.readMeasuredValues(massConcentrationPm1p0, massConcentrationPm2p5, massConcentrationPm4p0, massConcentrationPm10p0, ambientHumidity, ambientTemperature, vocIndex, noxIndex);
-    if (error)
-    {
-        HandleError("Error trying to execute readMeasuredValues(): ", error);
-        error = sen5x.deviceReset();
-        HandleError("Error trying to execute deviceReset(): ", error);
-        startMeasurement();
-        return;
-    }
-    if (ambientHumidity == 0 && ambientTemperature == 0)
-    {
-        startMeasurement();
-        _parent->push(new ErrorRecord(_name, "Restarting"));
-        return;
-    }
+    // if (error)
+    // {
+    //     HandleError("Error trying to execute readMeasuredValues(): ", error);
+        // error = sen5x.deviceReset();
+        // HandleError("Error trying to execute deviceReset(): ", error);
+        // startMeasurement();
+    //     return;
+    // }
+    // if (ambientHumidity == 0 && ambientTemperature == 0)
+    // {
+    //     startMeasurement();
+    //     _parent->push(new ErrorRecord(_name, "Restarting"));
+    //     return;
+    // }
 
     pushRecords();
 }
