@@ -19,6 +19,8 @@ void SensorContainer::begin()
     _sensors.push_back(new Scd4xSensor("Scd4x", this));
     _sensors.push_back(new Sfa3xSensor("Sfa3x", this));
     _sensors.push_back(new Sen5xSensor("Sen5x", this));
+    _sensors.push_back(new SACS3Sensor("Sacs3", this));
+)
 
     forEachSensors([](Sensor *sensor)
                    {sensor->begin();
