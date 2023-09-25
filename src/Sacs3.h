@@ -3,7 +3,7 @@
 
 #include "sensor.h"
 
-class SACS3Sensor : public Sensor
+class Sacs3Sensor : public Sensor
 {
 private:
     float relativehumidity = 0.0f;
@@ -31,7 +31,8 @@ private:
  */
 
     int64_t lastMeasurementTimeMs = 0;
-    
+
+    IRAM_ATTR void InterruptHandler();
     void FindTSync();
     void ExtractData(); 
     void pushRecords();
@@ -39,10 +40,9 @@ private:
 
 
 public:
-    SACS3Sensor(const char *name, SensorContainer *parent) : Sensor(name, parent){};
+    Sacs3Sensor(const char *name, SensorContainer *parent) : Sensor(name, parent){};
 
     void begin();
-    IRAM_ATTR void pulseISR();
     void read();
 
 

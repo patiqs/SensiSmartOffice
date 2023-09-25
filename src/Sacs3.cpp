@@ -3,45 +3,57 @@
 
 void SACS3Sensor::begin()
 {
-    attachInterrupt(digitalPinToInterrupt(interruptPin), LowPulse, FALLING); 
     StateReset();
+    attachInterrupt(digitalPinToInterrupt(interruptPin), InterruptHandler, FALLING); 
     while(!boolTSyncFoundState) FindTSync(); 
 }
 
+
 void SACS3Sensor::read()
 {
-    while(!boolTSyncFoundState) 
-    {
-        FindTSync(); 
-        delay(500);
-    } 
+    if(boolTSyncFoundState){
+        if(boolNewValueRegistered && SACS3MachineState == 0) {
+            ulTSyncTime = ulTimeDifInMicros;
+            boolNewValueRegistered = false; 
+            SACS3MachineState++;    
+        }
+        if(boolNewValueRegistered && SACS3MachineState == 1) {
+            ulTTempTime = ulTimeDifInMicros;
+            boolNewValueRegistered = false;
+            SACS3MachineState++;
+        }
+        if(boolNewValueRegistered && SACS3MachineState == 2) {
+            ulTRHTime = ulTimeDifInMicros;
+            boolNewValueRegistered = false;
+            SACS3MachineState = 0;    
+        }
+    
     
     ExtractData(); 
     pushRecords(); 
+    }
 }
 
 
 
 void SACS3Sensor::pushRecords()
 {
-    if(relativehumidity > 0 || relativehumidity < 100) 
-    {
+    if(relativehumidity > 0 || relativehumidity < 100) {
         _parent->push(new MeasureRecord(_name, SignalType::RELATIVE_HUMIDITY_PERCENTAGE, relativehumidity));
     }
-    else // Discard data, probably TSync period was lost
-    {
+    else { // Discard data, probably TSync period was lost. 
         HandleError("Invalid humidity reading. ", error);
-        StateReset();
+        boolTSyncFoundState = false;
+        FindTSync();
     }
 
-    if(temperatureincelsius > -40 || temperatureincelsius < 90) 
-    {
+    if(temperatureincelsius > -40 || temperatureincelsius < 90) {
         _parent->push(new MeasureRecord(_name, SignalType::TEMPERATURE_DEGREES_CELSIUS, temperatureincelsius));
     }
-    else // Discard data, probably TSync period was lost
-    {
+    else { // Discard data, probably TSync period was lost. 
         HandleError("Invalid temperature reading. ", error);
-        StateReset();
+        boolTSyncFoundState = false;
+        FindTSync();
     }
     //    _parent->push(new MeasureRecord(_name, SignalType::TEMPERATURE_DEGREES_FAHRENHEIT, temperatureinfahrenheit));
 }
@@ -56,39 +68,29 @@ void SACS3Sensor::ExtractData()
 
 
 
-
-IRAM_ATTR void SACS3Sensor::pulseISR()
+IRAM_ATTR void SACS3Sensor::InterruptHandler()
 {
     ulNewTimeInMicros = micros(); // Returns the number of microseconds since the Arduino board began running the current program. 
     // This number will overflow (go back to zero), after approximately 70 minutes.
-    if(ulTSyncTime > 170000 && ulTSyncTime != 0) {
-        if (SACS3MachineState == 0) { 
-        ulTSyncTime = ulNewTimeInMicros - ulPrevTimeInMicros;
-        SACS3MachineState++;
-        }
-        else if (SACS3MachineState == 1){
-        ulTTempTime = ulNewTimeInMicros - ulPrevTimeInMicros;
-        SACS3MachineState++;  
-        }
-        else if (SACS3MachineState == 2){
-        ulTRHTime = ulNewTimeInMicros - ulPrevTimeInMicros; 
-        SACS3MachineState = 0;  
-        }
+    ulTimeDifInMicros = ulNewTimeInMicros - ulPrevTimeInMicros;
     ulPrevTimeInMicros = ulNewTimeInMicros;
-    }
+    boolNewValueRegistered = true; 
 }
 
 
 
 void SACS3Sensor::FindTSync()
 {
-    while(!boolTSyncFoundState) {
-        if (ulTimeDifInMicros < 170000 || ulTimeDifInMicros > 230000) {
-            boolTSyncFoundState == false;
-        }
-        else {
+    if(boolNewValueRegistered){
+        if (ulTimeDifInMicros > 170000 || ulTimeDifInMicros < 230000) {
             boolTSyncFoundState = true;
             SACS3MachineState = 0;
+            boolNewValueRegistered = false;
+
+        }
+        else {
+            boolTSyncFoundState == false;
+            boolNewValueRegistered = false;
         }
     }
 }
@@ -99,6 +101,7 @@ void SAC3Sensor::StateReset()
 {
  // if the sensor is removed and reconnected, the device may lose T_Sync period, which therefore must be found again 
         boolTSyncFoundState = false;
+        boolNewValueRegistered = false;
         SACS3MachineState = 0;
         ulNewTimeInMicros = 0;
         ulPrevTimeInMicros = 0;
