@@ -3,26 +3,25 @@
 
 #include "sensor.h"
 
+IRAM_ATTR void InterruptHandler();
+
 class Sacs3Sensor : public Sensor
 {
 private:
+
+    const byte interruptPin = 14;
+
     float relativehumidity = 0.0f;
     float temperatureincelsius = 0.0f;
     float temperatureinfahrenheit = 0.0f;
 
-    unsigned long ulNewTimeInMicros = 0; 
-    unsigned long ulPrevTimeInMicros = 0;
-    unsigned long ulTimeDifInMicros = 0;
-
-    unsigned long ulTSyncTime = 0;
-    unsigned long ulTTempTime = 0;
-    unsigned long ulTRHTime = 0;
+    uint32_t ulTSyncTime = 0;
+    uint32_t ulTTempTime = 0;
+    uint32_t ulTRHTime = 0;
 
     bool boolTSyncFoundState = false;
-    bool boolLedState = false;
-    bool boolNewValueRegistered = false;
 
-    unsigned short SACS3MachineState = 0;
+    uint8_t SACS3MachineState = 0;
 
 /*  Machine States
  *    0 = In T_Sync period 
@@ -30,9 +29,6 @@ private:
  *    2 = In T_RH period  
  */
 
-    int64_t lastMeasurementTimeMs = 0;
-
-    IRAM_ATTR void InterruptHandler();
     void FindTSync();
     void ExtractData(); 
     void pushRecords();
