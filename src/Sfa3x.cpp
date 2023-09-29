@@ -18,18 +18,18 @@ void Sfa3xSensor::read()
 
     error = sfa3x.readMeasuredValues(hcho, humidity, temperature);
 
-    // if (error)
-    // {
-    //     HandleError("Error trying to execute readMeasuredValues(): ", error);
-    //     return;
-    // }
+    if (error)
+    {
+        HandleError("Error trying to execute readMeasuredValues(): ", error);
+        return;
+    }
 
-    // if (hcho == 0 && humidity == 0 && temperature == 0)
-    // {
-    //     startMeasurement();
-    //     _parent->push(new ErrorRecord(_name, "Restarting"));
-    //     return;
-    // }
+    if (hcho == 0 && humidity == 0 && temperature == 0)
+    {
+        startMeasurement();
+        _parent->push(new ErrorRecord(_name, "Restarting"));
+        return;
+    }
 
     _parent->push(new MeasureRecord(_name, SignalType::HCHO_PARTS_PER_BILLION, hcho / 5.0F));
     _parent->push(new MeasureRecord(_name, SignalType::RELATIVE_HUMIDITY_PERCENTAGE, humidity / 100.0F));

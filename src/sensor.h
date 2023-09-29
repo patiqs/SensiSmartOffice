@@ -1,7 +1,7 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
-#include "measureRecord.h"
+#include "record.h"
 #include "sensorContainer.h"
 #include <vector>
 

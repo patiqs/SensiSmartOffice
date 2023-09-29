@@ -1,5 +1,5 @@
-#ifndef MEASURERECORD_H
-#define MEASURERECORD_H
+#ifndef RECORD_H
+#define RECORD_H
 
 #include <WString.h>
 #include "Sensirion_Gadget_BLE.h"
@@ -105,4 +105,4 @@ struct MeasureRecord : Record
     }
 };
 
-#endif /* MEASURERECORD_H */
+#endif /* RECORD_H */

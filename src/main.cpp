@@ -43,8 +43,9 @@ void loop()
 
   if (millis() - lastMeasurementTimeMs >= measurementIntervalMs)
   {
-    // auto info = InfoRecord("Iteration", String(iteration));
-    // ui->visit(&info);
+
+    auto info = InfoRecord("Iteration", String(iteration));
+    ui->visit(&info);
 
     sensors.read();
 
