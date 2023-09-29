@@ -72,8 +72,6 @@ struct MeasureRecord : Record
             return "Humidity";
         case SignalType::CO2_PARTS_PER_MILLION:
             return "CO2";
-        case SignalType::HCHO_PARTS_PER_BILLION:
-            return "Formaldehyde";
         case SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER:
             return "PM2.5";
         case SignalType::VOC_INDEX:
@@ -93,8 +91,6 @@ struct MeasureRecord : Record
             return "%";
         case SignalType::CO2_PARTS_PER_MILLION:
             return "ppm";
-        case SignalType::HCHO_PARTS_PER_BILLION:
-            return "Formaldehyde";
         case SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER:
             return "ug/m3";
         case SignalType::VOC_INDEX:
