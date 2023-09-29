@@ -16,7 +16,23 @@ void Sen5xSensor::read()
 {
     // if (millis() - lastMeasurementTimeMs < measurementIntervalMs)
     // {
-    //     _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
+         _parent->push(new InfoRecord(_name, "Waiting for next data"));
     //     pushRecords();
     //     return;
     // };
@@ -24,6 +40,7 @@ void Sen5xSensor::read()
     uint16_t error;
 
     //error = sen5x.readMeasuredValues(massConcentrationPm1p0, massConcentrationPm2p5, massConcentrationPm4p0, massConcentrationPm10p0, ambientHumidity, ambientTemperature, vocIndex, noxIndex);
+    lastMeasurementTimeMs /= 1000;
     ambientTemperature = lastMeasurementTimeMs % 99;
     massConcentrationPm2p5 = lastMeasurementTimeMs % 110;
     vocIndex = lastMeasurementTimeMs % 211;
