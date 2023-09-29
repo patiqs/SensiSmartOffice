@@ -11,7 +11,7 @@ struct Record
 {
     String DeviceName;
     Record(String deviceName);
-    ~Record();
+    virtual ~Record();
 
     virtual String toString() = 0;
 
