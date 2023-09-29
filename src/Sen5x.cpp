@@ -14,19 +14,23 @@ void Sen5xSensor::begin()
 
 void Sen5xSensor::read()
 {
-    if (millis() - lastMeasurementTimeMs < measurementIntervalMs)
-    {
-        _parent->push(new InfoRecord(_name, "Waiting for next data"));
-        pushRecords();
-        return;
-    };
+    // if (millis() - lastMeasurementTimeMs < measurementIntervalMs)
+    // {
+    //     _parent->push(new InfoRecord(_name, "Waiting for next data"));
+    //     pushRecords();
+    //     return;
+    // };
     lastMeasurementTimeMs = millis();
     uint16_t error;
 
-    error = sen5x.readMeasuredValues(massConcentrationPm1p0, massConcentrationPm2p5, massConcentrationPm4p0, massConcentrationPm10p0, ambientHumidity, ambientTemperature, vocIndex, noxIndex);
+    //error = sen5x.readMeasuredValues(massConcentrationPm1p0, massConcentrationPm2p5, massConcentrationPm4p0, massConcentrationPm10p0, ambientHumidity, ambientTemperature, vocIndex, noxIndex);
+    ambientTemperature = lastMeasurementTimeMs % 99;
+    massConcentrationPm2p5 = lastMeasurementTimeMs % 110;
+    vocIndex = lastMeasurementTimeMs % 211;
+    error = lastMeasurementTimeMs % 10;
     // if (error)
     // {
-    //     HandleError("Error trying to execute readMeasuredValues(): ", error);
+        // HandleError("Error trying to execute readMeasuredValues(): ", error);
         // error = sen5x.deviceReset();
         // HandleError("Error trying to execute deviceReset(): ", error);
         // startMeasurement();

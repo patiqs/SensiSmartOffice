@@ -28,11 +28,11 @@ void GatgetBle::commitMeasures()
   // Serial.println(s.c_str());
 
   // provider->writeValueToCurrentSample(provider->_historyIntervalMilliSeconds / 1000, SignalType::TEMPERATURE_DEGREES_CELSIUS);
-  provider->writeValueToCurrentSample(provider->_historyIntervalMilliSeconds / 1000 % 99, SignalType::RELATIVE_HUMIDITY_PERCENTAGE);
+  // provider->writeValueToCurrentSample(rh, SignalType::RELATIVE_HUMIDITY_PERCENTAGE);
   // provider->writeValueToCurrentSample(provider->_sampleHistory.numberOfSamplesInHistory(), SignalType::CO2_PARTS_PER_MILLION);
   // provider->writeValueToCurrentSample(provider->_sampleHistory.numberOfSamplesInHistory(), SignalType::VOC_INDEX);
   // provider->writeValueToCurrentSample(provider->_historyIntervalMilliSeconds / 1000 , SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER);
-  // provider->writeValueToCurrentSample(x % 20, SignalType::HCHO_PARTS_PER_BILLION);
+  provider->writeValueToCurrentSample(provider->_historyIntervalMilliSeconds / 1000, SignalType::HCHO_PARTS_PER_BILLION);
 
   provider->commitSample();
 }

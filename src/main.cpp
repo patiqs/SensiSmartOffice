@@ -41,12 +41,10 @@ void loop()
 {
   ++iteration;
 
-  if (millis() - measurementIntervalMs >= lastMeasurementTimeMs)
+  if (millis() - lastMeasurementTimeMs >= measurementIntervalMs)
   {
-    lastMeasurementTimeMs = millis();
-
-    auto info = InfoRecord("Iteration", String(iteration));
-    ui->visit(&info);
+    // auto info = InfoRecord("Iteration", String(iteration));
+    // ui->visit(&info);
 
     sensors.read();
 
@@ -54,6 +52,9 @@ void loop()
 
     ui->commitMeasures();
     delay(500);
+    Serial.print(".");
+    
+    lastMeasurementTimeMs = millis();    
   };
   
   ui->handleNetwork();

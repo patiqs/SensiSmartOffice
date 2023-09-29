@@ -1,6 +1,7 @@
 {
 	"folders": [
 		{
+			"name": "SFA31",
 			"path": ".."
 		},
 		{
@@ -8,15 +9,8 @@
 			"path": "../../arduino-ble-gadget/examples/Example6_SFA30_BLE_Gadget"
 		},
 		{
-			"path": "../../arduino-ble-gadget"
-		},
-		{
-			"name": "Example1_MockedReadings",
-			"path": "../../arduino-ble-gadget/examples/Example1_MockedReadings"
-		},
-		{
-			"name": "Example4_WiFiSetupViaBle",
-			"path": "../../arduino-ble-gadget/examples/Example4_WiFiSetupViaBle"
+			"name": "Example6_SFA30_BLE_Gadget",
+			"path": "../lib/arduino-ble-gadget/examples/Example6_SFA30_BLE_Gadget"
 		}
 	],
 	"settings": {
