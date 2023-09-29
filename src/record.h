@@ -1,5 +1,5 @@
-#ifndef MEASURERECORD_H
-#define MEASURERECORD_H
+#ifndef RECORD_H
+#define RECORD_H
 
 #include <WString.h>
 #include "Sensirion_Gadget_BLE.h"
@@ -10,7 +10,8 @@ class uiInterface;
 struct Record
 {
     String DeviceName;
-    Record(String deviceName) : DeviceName(deviceName){};
+    Record(String deviceName);
+    virtual ~Record();
 
     virtual String toString() = 0;
 
@@ -24,6 +25,7 @@ struct InfoRecord : Record
         String deviceName,
         String info)
         : Record(deviceName), Info(info){};
+    ~InfoRecord();
 
     String toString() { return DeviceName + " > " + Info; }
 
@@ -37,6 +39,7 @@ struct ErrorRecord : Record
         String deviceName,
         String error)
         : Record(deviceName), Error(error){};
+    ~ErrorRecord();
 
     void accept(uiInterface *ui);
 
@@ -53,6 +56,7 @@ struct MeasureRecord : Record
         SignalType type,
         float value)
         : Record(deviceName), Type(type), Value(value){};
+    ~MeasureRecord();
 
     void accept(uiInterface *ui);
 
@@ -78,7 +82,7 @@ struct MeasureRecord : Record
             return "Undefined";
         }
     }
-    
+
     String mapUnit(SignalType st)
     {
         switch (st)
@@ -101,4 +105,4 @@ struct MeasureRecord : Record
     }
 };
 
-#endif /* MEASURERECORD_H */
+#endif /* RECORD_H */

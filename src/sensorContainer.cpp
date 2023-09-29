@@ -31,7 +31,7 @@ void SensorContainer::read()
                    { sensor->read(); });
 }
 
-void SensorContainer::print(uiInterface *ui)
+void SensorContainer::accept(uiInterface *ui)
 {
     while (!_records.empty())
     {
