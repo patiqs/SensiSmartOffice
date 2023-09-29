@@ -13,7 +13,6 @@ void GatgetBle::begin()
   sampleConfigSelector[DataType::T_RH_V3].sampleType = (uint8_t)-1;
   //provider = new DataProvider(lib, DataType::T_RH_V3, true, false, &wifi);
   provider = new DataProvider(lib);
-  provider = new DataProvider(lib, DataType::T_RH_V3, true, false, &wifi);
   provider->begin();
   provider->setSampleConfig(DataType::T_RH_CO2_VOC_NOX_PM25);
   // provider->_historyIntervalMilliSeconds = 60000; //1min

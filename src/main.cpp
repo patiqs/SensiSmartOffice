@@ -20,8 +20,6 @@ int64_t lastMeasurementTimeMs = 0;
 
 uint16_t dispCO2Reading = 0;
 
-Scd4xSensor Scd4;
-
 /* Set the LCD address to 0x27 for a 16 chars and 2 line display */
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
