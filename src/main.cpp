@@ -1,5 +1,4 @@
 #include "sensorContainer.h"
-#include "LiquidCrystal_I2C.h"
 #include "Sen5x.h"
 #include "Scd4x.h"
 #ifdef WEB
@@ -12,6 +11,8 @@
 #include "compaundUi.h"
 #endif
 
+Bounce b = Bounce();
+
 uiInterface *ui;
 ulong iteration = 0;
 SensorContainer sensors;
@@ -20,14 +21,17 @@ int64_t lastMeasurementTimeMs = 0;
 
 uint16_t dispCO2Reading = 0;
 
-/* Set the LCD address to 0x27 for a 16 chars and 2 line display */
-LiquidCrystal_I2C lcd(0x27, 20, 4);
+#define BUTTON_PIN 2; /* HAS TO BE CHANGED */
+bool State
 
 void setup()
 {
   Serial.begin(115200);
   Serial.println("\nI2C Scanner");
 //  pinMode(18, OUTPUT);
+
+  b.attach(BUTTON_PIN,INPUT_PULLUP); // Attach the debouncer to a pin with INPUT_PULLUP mode
+  b.interval(25); // Use a debounce interval of 25 milliseconds
 
   sensors.begin();
 
@@ -40,20 +44,21 @@ void setup()
 #ifdef Compaund
   ui = new CompaundUi();
 #endif
+#ifdef MateNubo
+  ui = new MateNubo();
+#endif
 
   ui->begin();
-
-  lcd.init();
-  lcd.backlight();  
 
 }
 
 void loop()
 {
-  // lcd.setCursor(0,0);
-  // lcd.print("Humi: ");  
-  // lcd.print();
 
+  b.update(); // Update the Bounce instance
+  if ( b.fell() ) {  // Call code if button transitions from HIGH to LOW
+
+  }
   ++iteration;
 
   if (millis() - lastMeasurementTimeMs >= measurementIntervalMs)
