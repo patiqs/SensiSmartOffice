@@ -15,8 +15,8 @@ void SensorContainer::begin()
 
     Wire.begin(I2C_SDA, I2C_SCL, 10000UL);
 
-    _sensors.push_back(new Scd4xSensor("Scd4x", this));
     _sensors.push_back(new Sen5xSensor("Sen5x", this));
+    _sensors.push_back(new Scd4xSensor("Scd4x", this));
 
 
     forEachSensors([](Sensor *sensor)

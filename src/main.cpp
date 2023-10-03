@@ -35,7 +35,7 @@ void setup()
 //  pinMode(18, OUTPUT);
 
   b.attach(BUTTON_PIN, INPUT_PULLUP); // Attach the debouncer to a pin with INPUT_PULLUP mode
-  b.interval(25); // Use a debounce interval of 25 milliseconds
+  b.interval(5); // Use a debounce interval of 5 milliseconds
   Serial.println("Sensor begin");  
   sensors.begin();
 #ifdef WEB
@@ -81,5 +81,5 @@ void loop()
   };
   
   ui->handleNetwork();
-  delay(1000);
+  delay(10);
 }
