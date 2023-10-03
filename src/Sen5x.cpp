@@ -46,7 +46,7 @@ void Sen5xSensor::pushRecords()
 {
     //_parent->push(new MeasureRecord(_name, SignalType::RELATIVE_HUMIDITY_PERCENTAGE, ambientHumidity));
     //_parent->push(new MeasureRecord(_name, SignalType::TEMPERATURE_DEGREES_CELSIUS, ambientTemperature));
-    _parent->push(new MeasureRecord(_name, SignalType::NOX_INDEX, noxIndex));
+    //_parent->push(new MeasureRecord(_name, SignalType::NOX_INDEX, noxIndex));
     _parent->push(new MeasureRecord(_name, SignalType::VOC_INDEX, vocIndex));
     _parent->push(new MeasureRecord(_name, SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER, massConcentrationPm2p5));
 }

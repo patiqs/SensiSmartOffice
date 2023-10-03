@@ -55,19 +55,25 @@ void displayHandler::handleNetwork() // handling the lcd display
     previousState = globalState;      
     }
 
+    char buffer[20];
     if (!globalState){
         lcd.setCursor(14,0);
-        lcd.print(dispTemperatureVal);
+        sprintf(buffer, "%.1f", dispTemperatureVal);
+        lcd.print(buffer);
         lcd.setCursor(14,2);
-        lcd.print(dispHumidityVal);
+        sprintf(buffer, "%.1f", dispHumidityVal);
+        lcd.print(buffer);
     }
     else {
         lcd.setCursor(11,0);
-        lcd.print(dispCO2Val);
+        sprintf(buffer, "%d", dispCO2Val);
+        lcd.print(buffer);
         lcd.setCursor(11,1);
-        lcd.print(dispPM2P5Val);
+        sprintf(buffer, "%d", dispPM2P5Val);
+        lcd.print(buffer);
         lcd.setCursor(11,2);
-        lcd.print(dispVOCVal);
+        sprintf(buffer, "%d", dispVOCVal);
+        lcd.print(buffer);
     }
 }
 
