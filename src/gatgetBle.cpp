@@ -63,6 +63,7 @@ void GatgetBle::visit(MeasureRecord *record)
   case SignalType::CO2_PARTS_PER_MILLION:
   case SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER:
   case SignalType::VOC_INDEX:
+  case SignalType::NOX_INDEX:
 
     provider->writeValueToCurrentSample(record->Value, record->Type);
     break;

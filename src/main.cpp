@@ -12,7 +12,7 @@
 #include "compaundUi.h"
 #endif
 #if NuboLcdBLE
-#include "displayHandler.h"
+#include "MateNubo.h"
 #endif
 
 

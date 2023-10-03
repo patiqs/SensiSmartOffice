@@ -76,6 +76,8 @@ struct MeasureRecord : Record
             return "PM2.5";
         case SignalType::VOC_INDEX:
             return "VOC";
+        case SignalType::NOX_INDEX:
+            return "NOX";
         default:
             return "Undefined";
         }
@@ -94,6 +96,8 @@ struct MeasureRecord : Record
         case SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER:
             return "ug/m3";
         case SignalType::VOC_INDEX:
+            return "";
+        case SignalType::NOX_INDEX:
             return "";
         default:
             return "Undefined";
