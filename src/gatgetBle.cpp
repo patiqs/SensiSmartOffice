@@ -1,4 +1,4 @@
-#if defined(BLE) || defined(Compaund)
+#if defined(BLE) || defined(Compaund) || defined(NuboLcdBLE)
 #include "gatgetBle.h"
 #include "Sensirion_Gadget_BLE.h"
 //#include "WifiMultiLibraryWrapper.h"
@@ -15,8 +15,8 @@ void GatgetBle::begin()
   provider = new DataProvider(lib);
   provider->begin();
   provider->setSampleConfig(DataType::T_RH_CO2_VOC_NOX_PM25);
+  //provider->setSampleConfig(DataType::T_RH_CO2_VOC_PM25_HCHO);
   // provider->_historyIntervalMilliSeconds = 60000; //1min
-  provider->setSampleConfig(DataType::T_RH_CO2_VOC_PM25_HCHO);
   Serial.print("Sensirion GadgetBle Lib initialized with deviceId = ");
   Serial.println(provider->getDeviceIdString());
 }
@@ -58,11 +58,12 @@ void GatgetBle::visit(MeasureRecord *record)
 {
   switch (record->Type)
   {
-  case SignalType::RELATIVE_HUMIDITY_PERCENTAGE:
   case SignalType::TEMPERATURE_DEGREES_CELSIUS:
-  case SignalType::VOC_INDEX:
-  case SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER:
+  case SignalType::RELATIVE_HUMIDITY_PERCENTAGE:
   case SignalType::CO2_PARTS_PER_MILLION:
+  case SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER:
+  case SignalType::VOC_INDEX:
+
     provider->writeValueToCurrentSample(record->Value, record->Type);
     break;
   default:

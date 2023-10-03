@@ -1,56 +1,31 @@
-#if defined(MateNubo)
-#include "gatgetBle.h"
-#include "Sensirion_GatgetBle.h"
+#include "MateNubo.h"
+
 #include "LiquidCrystal_I2C.h"
-//#include "WifiMultiLibraryWrapper.h"
+#include "displayHandler.h"
+#include "gatgetBle.h"
 
-NimBLELibraryWrapper lib;
-//WifiMultiLibraryWrapper wifi;
-LiquidCrystal_I2C lcd(0x27, 16, 2);
-
-void MateNubo::begin()
-{
-  sampleConfigSelector[DataType::T_RH_V3].sampleType = (uint8_t)-1;
-  //provider = new DataProvider(lib, DataType::T_RH_V3, true, false, &wifi);
-  provider = new DataProvider(lib);
-  provider->begin();
-  provider->setSampleConfig(DataType::T_RH_CO2_VOC_NOX_PM25);
-  lcd.init();
-  lcd.backlight();
-  // provider->_historyIntervalMilliSeconds = 60000; //1min
-  Serial.print("Sensirion GadgetBle Lib initialized with deviceId = ");
-  Serial.println(provider->getDeviceIdString());
+void MateNubo::begin(){
+    _children.push_back(new displayHandler());
+    _children.push_back(new GatgetBle());
+    std::for_each(_children.begin(), _children.end(), [](uiInterface* ui){ui->begin();});
 }
 
-
-int x;
-
-void MateNubo::commitMeasures()
-{
-  provider->commitSample();
+void MateNubo::commitMeasures(){
+    std::for_each(_children.begin(), _children.end(), [](uiInterface* ui){ui->commitMeasures();});
 }
 
-void MateNubo::handleNetwork()
-{
-  provider->handleDownload();
+void MateNubo::handleNetwork(){
+    std::for_each(_children.begin(), _children.end(), [](uiInterface* ui){ui->handleNetwork();});
 }
 
-void MateNubo::visit(InfoRecord *record) {}
-void MateNubo::visit(ErrorRecord *record) {}
-void MateNubo::visit(MeasureRecord *record)
-{
-  switch (record->Type)
-  {
-  case SignalType::RELATIVE_HUMIDITY_PERCENTAGE:
-  case SignalType::TEMPERATURE_DEGREES_CELSIUS:
-  case SignalType::VOC_INDEX:
-  case SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER:
-  case SignalType::CO2_PARTS_PER_MILLION:
-    provider->writeValueToCurrentSample(record->Value, record->Type);
-    break;
-  default:
-    break;
-  }
+void MateNubo::visit(InfoRecord* record){
+    std::for_each(_children.begin(), _children.end(), [record](uiInterface* ui){ui->visit(record);});
 }
 
-#endif /* BLE */
+void MateNubo::visit(ErrorRecord* record){
+    std::for_each(_children.begin(), _children.end(), [record](uiInterface* ui){ui->visit(record);});
+}
+
+void MateNubo::visit(MeasureRecord* record){
+    std::for_each(_children.begin(), _children.end(), [record](uiInterface* ui){ui->visit(record);});
+}

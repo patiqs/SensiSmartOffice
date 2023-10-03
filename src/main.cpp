@@ -1,6 +1,7 @@
 #include "sensorContainer.h"
 #include "Sen5x.h"
 #include "Scd4x.h"
+#include <Bounce2.h>
 #ifdef WEB
 #include "Web.h"
 #endif
@@ -10,7 +11,13 @@
 #ifdef Compaund
 #include "compaundUi.h"
 #endif
+#if NuboLcdBLE
+#include "displayHandler.h"
+#endif
 
+
+bool globalState = 0;
+const byte BUTTON_PIN = 2; /* HAS TO BE CHANGED TO THE CORRECT PIN */
 Bounce b = Bounce();
 
 uiInterface *ui;
@@ -21,9 +28,6 @@ int64_t lastMeasurementTimeMs = 0;
 
 uint16_t dispCO2Reading = 0;
 
-#define BUTTON_PIN 2; /* HAS TO BE CHANGED */
-bool State
-
 void setup()
 {
   Serial.begin(115200);
@@ -32,7 +36,6 @@ void setup()
 
   b.attach(BUTTON_PIN,INPUT_PULLUP); // Attach the debouncer to a pin with INPUT_PULLUP mode
   b.interval(25); // Use a debounce interval of 25 milliseconds
-
   sensors.begin();
 
 #ifdef WEB
@@ -54,11 +57,9 @@ void setup()
 
 void loop()
 {
-
   b.update(); // Update the Bounce instance
-  if ( b.fell() ) {  // Call code if button transitions from HIGH to LOW
+  if ( b.fell() ) globalState = !globalState;  // Call code if button transitions from HIGH to LOW
 
-  }
   ++iteration;
 
   if (millis() - lastMeasurementTimeMs >= measurementIntervalMs)
@@ -76,6 +77,7 @@ void loop()
     Serial.print(".");
     
     lastMeasurementTimeMs = millis();    
+
   };
   
   ui->handleNetwork();

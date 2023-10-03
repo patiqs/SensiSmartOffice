@@ -1,9 +1,15 @@
 #ifndef MATENUBO_H
 #define MATENUBO_H
+
 #include "uiInterface.h"
+
+extern bool globalState;
 
 class MateNubo : public uiInterface
 {
+private:
+    std::vector<uiInterface*> _children;
+
 public:
     void begin();
     void commitMeasures();
@@ -14,4 +20,4 @@ public:
     void visit(MeasureRecord* record);
 };
 
-#endif /* GATGETBLE_H */
+#endif /*MATENUBO_H*/
