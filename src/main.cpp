@@ -1,6 +1,7 @@
 #include "sensorContainer.h"
 #include "Sen5x.h"
 #include "Scd4x.h"
+#include "displayHandler.h"
 #include <Bounce2.h>
 #ifdef WEB
 #include "Web.h"
@@ -17,27 +18,26 @@
 
 
 bool globalState = 0;
-const byte BUTTON_PIN = 2; /* HAS TO BE CHANGED TO THE CORRECT PIN */
+#define BUTTON_PIN 14
 Bounce b = Bounce();
 
 uiInterface *ui;
 ulong iteration = 0;
 SensorContainer sensors;
+displayHandler display;
 static int measurementIntervalMs = 5000;
 int64_t lastMeasurementTimeMs = 0;
-
-uint16_t dispCO2Reading = 0;
 
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("\nI2C Scanner");
+  Serial.println("Wire started");
 //  pinMode(18, OUTPUT);
 
-  b.attach(BUTTON_PIN,INPUT_PULLUP); // Attach the debouncer to a pin with INPUT_PULLUP mode
+  b.attach(BUTTON_PIN, INPUT_PULLUP); // Attach the debouncer to a pin with INPUT_PULLUP mode
   b.interval(25); // Use a debounce interval of 25 milliseconds
+  Serial.println("Sensor begin");  
   sensors.begin();
-
 #ifdef WEB
   ui = new Web();
 #endif
@@ -47,7 +47,7 @@ void setup()
 #ifdef Compaund
   ui = new CompaundUi();
 #endif
-#ifdef MateNubo
+#ifdef NuboLcdBLE
   ui = new MateNubo();
 #endif
 
@@ -81,5 +81,5 @@ void loop()
   };
   
   ui->handleNetwork();
-  delay(3);
+  delay(1000);
 }

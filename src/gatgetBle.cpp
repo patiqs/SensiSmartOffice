@@ -10,6 +10,7 @@ DataProvider *provider;
 
 void GatgetBle::begin()
 {
+  Serial.println("GadgetBle begin");
   sampleConfigSelector[DataType::T_RH_V3].sampleType = (uint8_t)-1;
   //provider = new DataProvider(lib, DataType::T_RH_V3, true, false, &wifi);
   provider = new DataProvider(lib);
@@ -63,7 +64,7 @@ void GatgetBle::visit(MeasureRecord *record)
   case SignalType::CO2_PARTS_PER_MILLION:
   case SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER:
   case SignalType::VOC_INDEX:
-  case SignalType::NOX_INDEX:
+  //case SignalType::NOX_INDEX:
 
     provider->writeValueToCurrentSample(record->Value, record->Type);
     break;
