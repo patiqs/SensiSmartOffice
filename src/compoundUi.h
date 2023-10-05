@@ -1,18 +1,14 @@
-#ifndef DISPL_H
-#define DISPL_H
+#ifndef COMPOUNDUI_H
+#define COMPOUNDUI_H
 
 #include "uiInterface.h"
-#include "LiquidCrystal_I2C.h"
-#include <vector>
 
-class displayHandler : public uiInterface
+class CompoundUi : public uiInterface
 {
 private:
-    std::vector<String> _records;
-    void push_back(String entry);
+    std::vector<uiInterface*> _children;
 
 public:
-
     void begin();
     void commitMeasures();
     void handleNetwork();
@@ -22,4 +18,4 @@ public:
     void visit(MeasureRecord* record);
 };
 
-#endif /* DISPL_H */
+#endif /*COMPOUNDUI_H*/

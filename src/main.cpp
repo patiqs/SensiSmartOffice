@@ -1,64 +1,45 @@
 #include "sensorContainer.h"
 #include "Sen5x.h"
 #include "Scd4x.h"
-#include "displayHandler.h"
+#include "Sfa3x.h"
+// #include "Sacs3.h"
+
 #include <Bounce2.h>
-#ifdef WEB
-#include "Web.h"
-#endif
-#ifdef BLE
-#include "gatgetBle.h"
-#endif
-#ifdef Compaund
-#include "compaundUi.h"
-#endif
-#if NuboLcdBLE
-#include "MateNubo.h"
-#endif
+#include "compoundUi.h"
 
+extern int globalState;
+#define numberOfStates 3;
 
-bool globalState = 0;
-#define BUTTON_PIN 14
+#define BUTTON_PIN 27
 Bounce b = Bounce();
 
 uiInterface *ui;
 ulong iteration = 0;
 SensorContainer sensors;
-displayHandler display;
 static int measurementIntervalMs = 5000;
 int64_t lastMeasurementTimeMs = 0;
 
 void setup()
 {
+  globalState = 0;
   Serial.begin(115200);
   Serial.println("Wire started");
-//  pinMode(18, OUTPUT);
 
   b.attach(BUTTON_PIN, INPUT_PULLUP); // Attach the debouncer to a pin with INPUT_PULLUP mode
-  b.interval(5); // Use a debounce interval of 1 milliseconds
+  b.interval(5); // Use a debounce interval of 5 milliseconds
   Serial.println("Sensor begin");  
   sensors.begin();
-#ifdef WEB
-  ui = new Web();
-#endif
-#ifdef BLE
-  ui = new GatgetBle();
-#endif
-#ifdef Compaund
-  ui = new CompaundUi();
-#endif
-#ifdef NuboLcdBLE
-  ui = new MateNubo();
-#endif
 
+  ui = new CompoundUi();
   ui->begin();
-
 }
 
 void loop()
 {
   b.update(); // Update the Bounce instance
-  if ( b.fell() ) globalState = !globalState;  // Call code if button transitions from HIGH to LOW
+  if (b.fell()) { // Call code if button transitions from HIGH to LOW
+    globalState = (globalState + 1) % numberOfStates;
+    }  
 
   ++iteration;
 
@@ -81,5 +62,5 @@ void loop()
   };
   
   ui->handleNetwork();
-  delay(10);
+  // delay(3);
 }

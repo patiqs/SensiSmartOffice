@@ -1,4 +1,5 @@
-#if defined(WEB) || defined(Compaund)
+#ifdef enableWEB 
+
 #include "Web.h"
 #include <WebServer.h>
 
@@ -64,4 +65,4 @@ void Web::push_back(String entry)
   }
 }
 
-#endif /* WEB */
+#endif /* enableWEB */
