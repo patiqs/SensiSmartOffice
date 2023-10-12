@@ -38,6 +38,7 @@ float dispHumidityVal;
 uint32_t dispCO2Val;
 uint32_t dispPM2P5Val;
 uint32_t dispVOCVal;
+uint32_t dispHCHOVal;
 
 
 void displayHandler::handleNetwork() // handling the lcd display
@@ -58,9 +59,9 @@ void displayHandler::handleNetwork() // handling the lcd display
         }
         if (globalState == 2) {   
             lcd.setCursor(0,0);
-            lcd.print("CO2:         ppm");
-            lcd.setCursor(0,1);
             lcd.print("VocIndex:       "); 
+            lcd.setCursor(0,1);
+            lcd.print("HCHO:        ppb");
 
         }
     previousState = globalState;      
@@ -86,11 +87,11 @@ void displayHandler::handleNetwork() // handling the lcd display
     }
     if (globalState == 2)
     {
-        lcd.setCursor(7,0);
-        sprintf(buffer, "%d", dispCO2Val);
-        lcd.print(buffer);
-        lcd.setCursor(10,1);
+        lcd.setCursor(10,0);
         sprintf(buffer, "%d", dispVOCVal);
+        lcd.print(buffer);
+        lcd.setCursor(8,1);
+        sprintf(buffer, "%d", dispHCHOVal);
         lcd.print(buffer);
     }
 }
@@ -106,6 +107,7 @@ void displayHandler::visit(MeasureRecord *record) {
     case SignalType::CO2_PARTS_PER_MILLION: dispCO2Val = record->Value; break;
     case SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER: dispPM2P5Val = record->Value; break;
     case SignalType::VOC_INDEX: dispVOCVal = record->Value; break;
+    case SignalType::HCHO_PARTS_PER_BILLION: dispHCHOVal = record->Value; break;
     }
 }
 

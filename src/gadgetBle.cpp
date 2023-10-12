@@ -15,8 +15,8 @@ void GadgetBle::begin()
   //provider = new DataProvider(lib, DataType::T_RH_V3, true, false, &wifi);
   provider = new DataProvider(lib);
   provider->begin();
-  provider->setSampleConfig(DataType::T_RH_CO2_VOC_NOX_PM25);
-  //provider->setSampleConfig(DataType::T_RH_CO2_VOC_PM25_HCHO);
+  provider->setSampleConfig(DataType::T_RH_CO2_VOC_PM25_HCHO);
+  // provider->setSampleConfig(dataType:DataType::T_RH_CO2_VOC_PM25_HCHO);
   // provider->_historyIntervalMilliSeconds = 60000; //1min
   Serial.print("Sensirion GadgetBle Lib initialized with deviceId = ");
   Serial.println(provider->getDeviceIdString());
