@@ -1,6 +1,7 @@
 #include "sensorContainer.h"
 #include "Scd4x.h"
 #include "Sen5x.h"
+#include "Sht4x.h"
 //#include "Sacs3.h"
 //#include "Sfa3x.h"
 
@@ -21,6 +22,7 @@ void SensorContainer::begin()
 
     _sensors.push_back(new Scd4xSensor("Scd4x", this)); 
     _sensors.push_back(new Sen5xSensor("Sen5x", this));
+    _sensors.push_back(new Sht4xSensor("Sht4x", this));
     // _sensors.push_back(new Sfa3xSensor("Sfa3x", this));
     // _sensors.push_back(new Sacs3Sensor("Sacs3", this)); 
 

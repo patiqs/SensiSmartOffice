@@ -1,6 +1,7 @@
 #include "sensorContainer.h"
 #include "Sen5x.h"
 #include "Scd4x.h"
+#include "Sht4x.h"
 // #include "Sfa3x.h"
 // #include "Sacs3.h"
 
