@@ -24,7 +24,7 @@ void Sht4xSensor::read()
     lastMeasurementTimeMs = millis();
     uint16_t error;
 
-    error = Sht4x.measureLowestPrecision(ambientHumidity, ambientTemperature);
+    error = Sht4x.measureLowestPrecision(ambientTemperature, ambientHumidity);
     if (error)
     {
         HandleError("Error trying to execute readMeasuredValues(): ", error);
@@ -47,9 +47,6 @@ void Sht4xSensor::pushRecords()
 {
     _parent->push(new MeasureRecord(_name, SignalType::RELATIVE_HUMIDITY_PERCENTAGE, ambientHumidity));
     _parent->push(new MeasureRecord(_name, SignalType::TEMPERATURE_DEGREES_CELSIUS, ambientTemperature));
-    //_parent->push(new MeasureRecord(_name, SignalType::NOX_INDEX, noxIndex));
-    // _parent->push(new MeasureRecord(_name, SignalType::VOC_INDEX, vocIndex));
-    // _parent->push(new MeasureRecord(_name, SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER, massConcentrationPm2p5));
 }
 
 void Sht4xSensor::startMeasurement()
