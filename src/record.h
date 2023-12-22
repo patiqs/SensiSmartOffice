@@ -76,8 +76,8 @@ struct MeasureRecord : Record
             return "PM2.5";
         case SignalType::VOC_INDEX:
             return "VOC";
-        // case SignalType::HCHO_PARTS_PER_BILLION:
-        //     return "HCHO";
+        case SignalType::HCHO_PARTS_PER_BILLION:
+            return "HCHO";
         default:
             return "Undefined";
         }
@@ -97,8 +97,8 @@ struct MeasureRecord : Record
             return "ug/m3";
         case SignalType::VOC_INDEX:
             return "";
-        // case SignalType::HCHO_PARTS_PER_BILLION:
-        //     return "ppb";
+        case SignalType::HCHO_PARTS_PER_BILLION:
+             return "ppb";
         default:
             return "Undefined";
         }

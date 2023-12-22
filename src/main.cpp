@@ -1,17 +1,39 @@
 #include "sensorContainer.h"
+
+#ifdef enableSen5x
 #include "Sen5x.h"
+#endif
+
+#ifdef enableScd4x
 #include "Scd4x.h"
+#endif
+
+#ifdef enableSht4x
 #include "Sht4x.h"
-// #include "Sfa3x.h"
-// #include "Sacs3.h"
+#endif
+
+#ifdef enableSfa3x
+#include "Sfa3x.h"
+#endif
+
+#ifdef enableSacs3
+#include "Sacs3.h"
+#endif
 
 #include <Bounce2.h>
 #include "compoundUi.h"
 
 extern int globalState;
-#define numberOfStates 2;
 
-#define BUTTON_PIN 14 //p14
+#ifdef enableDisplay4x20
+  #define numberOfStates 2;
+#endif
+
+#ifdef enableDisplay2x16
+  #define numberOfStates 3;
+#endif
+
+#define BUTTON_PIN 27 //p27
 Bounce b = Bounce();
 
 uiInterface *ui;

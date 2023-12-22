@@ -1,17 +1,32 @@
 #include "sensorContainer.h"
-#include "Scd4x.h"
-#include "Sen5x.h"
-#include "Sht4x.h"
-//#include "Sacs3.h"
-//#include "Sfa3x.h"
+
+#ifdef enableSen5x
+    #include "Sen5x.h"
+#endif
+
+#ifdef enableScd4x
+    #include "Scd4x.h"
+#endif
+
+#ifdef enableSht4x
+    #include "Sht4x.h"
+#endif
+
+#ifdef enableSfa3x
+    #include "Sfa3x.h"
+#endif
+
+#ifdef enableSacs3
+//    #include "Sacs3.h"
+#endif
 
 
 #include <algorithm>
 #include <Wire.h>
 #include <Arduino.h>
 
-#define I2C_SDA 21 
-#define I2C_SCL 22 
+#define I2C_SDA 33 
+#define I2C_SCL 32 
 
 void SensorContainer::begin()
 {
@@ -20,12 +35,28 @@ void SensorContainer::begin()
 
     Wire.begin(I2C_SDA, I2C_SCL, 10000UL);
 
-    _sensors.push_back(new Scd4xSensor("Scd4x", this)); 
-    _sensors.push_back(new Sen5xSensor("Sen5x", this));
-    _sensors.push_back(new Sht4xSensor("Sht4x", this));
-    // _sensors.push_back(new Sfa3xSensor("Sfa3x", this));
-    // _sensors.push_back(new Sacs3Sensor("Sacs3", this)); 
 
+    
+    #ifdef enableSen5x
+    _sensors.push_back(new Sen5xSensor("Sen5x", this));
+    #endif
+
+    #ifdef enableScd4x
+    _sensors.push_back(new Scd4xSensor("Scd4x", this)); 
+    #endif
+
+    #ifdef enableSht4x
+    _sensors.push_back(new Sht4xSensor("Sht4x", this));
+    #endif
+
+    #ifdef enableSfa3x
+    _sensors.push_back(new Sfa3xSensor("Sfa3x", this));
+    #endif
+
+    #ifdef enableSacs3
+    _sensors.push_back(new Sacs3Sensor("Sacs3", this));
+    #endif
+    
 
     forEachSensors([](Sensor *sensor)
                    {sensor->begin();

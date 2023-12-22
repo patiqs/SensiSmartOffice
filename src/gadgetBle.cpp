@@ -15,8 +15,8 @@ void GadgetBle::begin()
   //provider = new DataProvider(lib, DataType::T_RH_V3, true, false, &wifi);
   provider = new DataProvider(lib);
   provider->begin();
-  provider->setSampleConfig(DataType::T_RH_CO2_VOC_NOX_PM25);
-  // provider->setSampleConfig(dataType:DataType::T_RH_CO2_VOC_PM25_HCHO);
+  // provider->setSampleConfig(DataType::T_RH_CO2_VOC_NOX_PM25);
+  provider->setSampleConfig(DataType::T_RH_CO2_VOC_PM25_HCHO);
   // provider->_historyIntervalMilliSeconds = 60000; //1min
   Serial.print("Sensirion GadgetBle Lib initialized with deviceId = ");
   Serial.println(provider->getDeviceIdString());
@@ -64,7 +64,7 @@ void GadgetBle::visit(MeasureRecord *record)
   case SignalType::CO2_PARTS_PER_MILLION:
   case SignalType::PM2P5_MICRO_GRAMM_PER_CUBIC_METER:
   case SignalType::VOC_INDEX:
-  // case SignalType::HCHO_PARTS_PER_BILLION:
+  case SignalType::HCHO_PARTS_PER_BILLION:
   // case SignalType::NOX_INDEX:
 
     provider->writeValueToCurrentSample(record->Value, record->Type);

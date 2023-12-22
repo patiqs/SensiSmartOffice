@@ -1,11 +1,13 @@
 #include "compoundUi.h"
 
-#ifdef enableDisplay
+#if (defined enableDisplay2x16) || (defined enableDisplay4x20)
 #include "displayHandler.h"
 #endif
+
 #ifdef enableWEB
 #include "Web.h"
-#endif 
+#endif
+
 #ifdef enableBLE
 #include "gadgetBle.h"
 #endif 
@@ -19,7 +21,7 @@ void CompoundUi::begin(){
     #ifdef enableWEB
         _children.push_back(new Web());
     #endif
-    #ifdef enableDisplay
+    #if (defined enableDisplay2x16) || (defined enableDisplay4x20)
         _children.push_back(new displayHandler()); 
     #endif
     std::for_each(_children.begin(), _children.end(), [](uiInterface* ui){ui->begin();});
